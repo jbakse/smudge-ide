@@ -8,6 +8,31 @@
   </head>
   <body>
     <h1>Hello, Smudge!</h1>
-    This is a push.
+    Testing sign in.
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
+
+    <!-- Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-firestore.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCOeKDUm4ZbUJhkIs1-qmvoRe4HnlsjzG8",
+        authDomain: "smudge-ide.firebaseapp.com",
+        databaseURL: "https://smudge-ide.firebaseio.com",
+        projectId: "smudge-ide",
+        storageBucket: "smudge-ide.appspot.com",
+        messagingSenderId: "302457341437",
+        appId: "1:302457341437:web:6705b6cac3491435804594"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <script src="main.js"></script>
   </body>
 </html>
