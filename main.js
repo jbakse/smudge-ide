@@ -30,6 +30,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   } else {
     console.log("user signed out!");
     document.getElementById("greeting").innerText = `Please sign in!`;
+    document.getElementById("user-photo").innerHTML = "";
     // User is signed out.
   }
 });
