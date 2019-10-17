@@ -1,8 +1,8 @@
 <template>
     <div id="sign-in">
         <template v-if="user">
-            <img id="user-photo" v-bind:src="user.photoURL" />
-            <div id="user-display-name">{{user.displayName}}</div>
+            <img class="user-photo" v-bind:src="user.photoURL" />
+            <div class="user-display-name">{{user.displayName}}</div>
             <button id="sign-out" v-on:click="signOut">Sign Out</button>
         </template>
         <button v-else v-on:click="signIn">Sign In</button>
@@ -19,7 +19,7 @@ export default Vue.extend({
     props: {},
 
     data: () => ({
-        user: false as (firebase.User | false),
+        user: null as (firebase.User | null),
     }),
     methods: {
         signIn() {
@@ -44,14 +44,14 @@ export default Vue.extend({
         firebase.initializeApp(firebaseConfig);
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                this.user = user;
                 console.log('user signed in!');
                 console.log(user.displayName);
                 console.log(user.photoURL);
+                console.log(user);
             } else {
                 console.log('user signed out!');
-                this.user = false;
             }
+            this.user = user;
         });
     },
 });
@@ -63,10 +63,10 @@ export default Vue.extend({
     display: flex;
     align-items: center;
 }
-#user-display-name {
+.user-display-name {
     padding: 0 10px;
 }
-#user-photo {
+.user-photo {
     max-width: 64px;
     max-height: 64px;
 }

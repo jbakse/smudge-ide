@@ -1,5 +1,5 @@
 <template>
     <div class="about">
-        <h1>A sketching IDE for SmudgeJS.</h1>
+        <h1>About SmudgeJS</h1>
     </div>
 </template>
