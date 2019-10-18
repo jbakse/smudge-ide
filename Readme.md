@@ -2,6 +2,8 @@
 
 ## Project setup
 
+### Download dependencies
+
 ```
 npm install
 ```
