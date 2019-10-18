@@ -5,7 +5,7 @@
       Sketch Id: {{id}}
       <br />Content:
       <br />
-      <textarea :value="sketch.content" @input="updateContent"></textarea>
+      <textarea v-model="sketch.content"></textarea>
       <br />
       <button @click="saveContent">Save Sketch</button>
     </template>
@@ -44,9 +44,6 @@ export default Vue.extend({
   },
 
   methods: {
-    updateContent(e) {
-      console.log('Update Content', (this.sketch.content = e.target.value));
-    },
     saveContent() {
       console.log('Save Content', this.sketch.content);
       db.collection('profiles')
