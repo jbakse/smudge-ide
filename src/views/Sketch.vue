@@ -1,10 +1,13 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch">
-      <h1>Sketch</h1>
-      <h2>id: {{id}}</h2>
-      title: {{sketch.title}}
-      content: {{sketch.content}}
+      <h1>{{sketch.title}}</h1>
+      Sketch Id: {{id}}
+      <br />Content:
+      <br />
+      <textarea :value="sketch.content" @input="updateContent"></textarea>
+      <br />
+      <button @click="saveContent">Save Sketch</button>
     </template>
   </div>
 </template>
@@ -40,12 +43,40 @@ export default Vue.extend({
     },
   },
 
-  methods: {},
+  methods: {
+    updateContent(e) {
+      console.log('Update Content', (this.sketch.content = e.target.value));
+    },
+    saveContent() {
+      console.log('Save Content', this.sketch.content);
+      db.collection('profiles')
+        .doc(this.uid)
+        .collection('sketches')
+        .doc(this.id)
+        .update({ content: this.sketch.content });
+    },
+  },
 });
 </script>
 
 
 <style scoped lang="scss">
+.sketch {
+  padding: 5px;
+}
+
+textarea {
+  border: none;
+  border-left: 1px solid #ccc;
+  resize: none;
+  outline: none;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+  width: 50%;
+  height: 400px;
+}
 </style>
 
 

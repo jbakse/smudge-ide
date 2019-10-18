@@ -2,7 +2,7 @@
   <div class="page profile">
     <template v-if="user">
       <h1>{{user.displayName}}</h1>
-      <p>User ID: {{user.uid}}</p>
+      <p>User Id: {{user.uid}}</p>
       <p>User Email: {{user.email}}</p>
 
       <h1>Sketches</h1>
