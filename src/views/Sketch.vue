@@ -2,7 +2,7 @@
   <div class="view sketch">
     <template v-if="sketch">
       <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
-      Sketch Id: {{id}}
+      Sketch Id: {{sketchID}}
       <br />Content:
       <br />
       <textarea v-model="sketch.content"></textarea>
@@ -28,23 +28,24 @@ type Sketch = {
 
 export default Vue.extend({
   name: 'Sketch',
-  props: ['uid', 'id'],
+  props: ['userID', 'sketchID'],
 
   data: () => ({
     sketch: null as Sketch,
   }),
 
   watch: {
-    id: {
+    sketchID: {
       immediate: true,
-      handler(id) {
+      handler(sketchID) {
+        console.log(this.userID, this.sketchID);
         this.$bind(
           'sketch',
           db
             .collection('profiles')
-            .doc(this.uid)
+            .doc(this.userID)
             .collection('sketches')
-            .doc(this.id)
+            .doc(this.sketchID)
         );
       },
     },
@@ -61,9 +62,9 @@ export default Vue.extend({
     saveSketch() {
       if (this.sketch == null) return;
       db.collection('profiles')
-        .doc(this.uid)
+        .doc(this.userID)
         .collection('sketches')
-        .doc(this.id)
+        .doc(this.sketchID)
         .update({ title: this.sketch.title, content: this.sketch.content });
     },
   },

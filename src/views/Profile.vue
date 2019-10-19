@@ -9,7 +9,7 @@
       <ul class="sketches">
         <li v-for="sketch in sketches" v-bind:key="sketch.id">
           <router-link
-            :to="{ name: 'sketch', params: {uid: userInfo.uid, id: sketch.id}}"
+            :to="{ name: 'sketch', params: {userID: userInfo.uid, sketchID: sketch.id}}"
           >{{ sketch.title }}—{{sketch.id}}</router-link>
         </li>
       </ul>
@@ -34,7 +34,7 @@ const profiles = db.collection('profiles');
 
 export default Vue.extend({
   name: 'Profile',
-  props: {},
+  props: ['userID'],
 
   data: () => ({
     userInfo: user.userInfo,

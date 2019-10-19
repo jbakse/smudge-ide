@@ -23,14 +23,14 @@ export default new Router({
     },
 
     {
-      path: '/profile/:uid?',
+      path: '/profile/:userID?',
       name: 'profile',
       component: () =>
         import(/* webpackChunkName: "about" */ './views/Profile.vue'),
     },
 
     {
-      path: '/sketch/:uid/:id',
+      path: '/sketch/:userID/:sketchID',
       name: 'sketch',
       props: true,
       component: () =>
