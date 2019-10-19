@@ -12,6 +12,7 @@
     "ordered-imports": false,
     "quotemark": [true, "single"],
     "no-console": false,
-    "trailing-comma": [false, { "multiline": "never", "singleline": "never" }]
+    "trailing-comma": [false, { "multiline": "never", "singleline": "never" }],
+    "curly": [true, "ignore-same-line"]
   }
 }

@@ -1,13 +1,13 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch">
-      <h1>{{sketch.title}}</h1>
+      <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
       Sketch Id: {{id}}
       <br />Content:
       <br />
       <textarea v-model="sketch.content"></textarea>
       <br />
-      <button @click="saveContent">Save Sketch</button>
+      <button @click="saveSketch">Save Sketch</button>
     </template>
   </div>
 </template>
@@ -19,12 +19,18 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 const db = firebase.firestore();
 
+type Sketch = {
+  id: string;
+  title: string;
+  content: string;
+} | null;
+
 export default Vue.extend({
   name: 'Sketch',
   props: ['uid', 'id'],
 
   data: () => ({
-    sketch: null,
+    sketch: null as Sketch,
   }),
 
   watch: {
@@ -44,13 +50,21 @@ export default Vue.extend({
   },
 
   methods: {
-    saveContent() {
-      console.log('Save Content', this.sketch.content);
+    updateTitle(e: Event) {
+      const title = (e.target as Element).textContent;
+      if (title == null) return;
+      if (this.sketch == null) return;
+      this.sketch.title = title;
+    },
+
+    saveSketch() {
+      if (this.sketch == null) return;
+
       db.collection('profiles')
         .doc(this.uid)
         .collection('sketches')
         .doc(this.id)
-        .update({ content: this.sketch.content });
+        .update({ title: this.sketch.title, content: this.sketch.content });
     },
   },
 });
