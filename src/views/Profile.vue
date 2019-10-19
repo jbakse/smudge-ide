@@ -1,15 +1,15 @@
 <template>
   <div class="page profile">
-    <template v-if="user">
-      <h1>{{user.displayName}}</h1>
-      <p>User Id: {{user.uid}}</p>
-      <p>User Email: {{user.email}}</p>
+    <template v-if="userInfo.loggedIn">
+      <h1>{{userInfo.displayName}}</h1>
+      <p>User Id: {{userInfo.uid}}</p>
+      <p>User Email: {{userInfo.email}}</p>
 
       <h1>Sketches</h1>
       <ul class="sketches">
         <li v-for="sketch in sketches" v-bind:key="sketch.id">
           <router-link
-            :to="{ name: 'sketch', params: {uid: user.uid, id: sketch.id}}"
+            :to="{ name: 'sketch', params: {uid: userInfo.uid, id: sketch.id}}"
           >{{ sketch.title }}—{{sketch.id}}</router-link>
         </li>
       </ul>
@@ -24,8 +24,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import user from '../user';
+
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import 'firebase/firestore';
 
 const db = firebase.firestore();
@@ -36,22 +37,18 @@ export default Vue.extend({
   props: {},
 
   data: () => ({
-    user: null as (firebase.User | null),
+    userInfo: user.userInfo,
     profile: null,
     sketches: null,
   }),
 
   watch: {
-    user: {
+    'userInfo.uid': {
       immediate: true,
-      handler(user) {
-        if (user) {
-          this.$bind('profile', profiles.doc(user.uid));
-          this.$bind('sketches', profiles.doc(user.uid).collection('sketches'));
-          console.log(
-            'collection',
-            profiles.doc(user.uid).collection('sketches').id
-          );
+      handler(uid) {
+        if (uid) {
+          this.$bind('profile', profiles.doc(uid));
+          this.$bind('sketches', profiles.doc(uid).collection('sketches'));
         }
       },
     },
@@ -59,20 +56,15 @@ export default Vue.extend({
 
   methods: {
     createSketch() {
-      const uid = (this.user as firebase.User).uid;
+      if (user.userInfo.loggedIn) return;
       db.collection('profiles')
-        .doc(uid)
+        .doc(user.userInfo.uid)
         .collection('sketches')
         .add({
           title: 'untitled',
           content: '// Hello, SmudgeJS!',
         });
     },
-  },
-  mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
-      this.user = user;
-    });
   },
 });
 </script>

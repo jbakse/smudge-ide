@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 const db = firebase.firestore();
@@ -59,7 +60,6 @@ export default Vue.extend({
 
     saveSketch() {
       if (this.sketch == null) return;
-
       db.collection('profiles')
         .doc(this.uid)
         .collection('sketches')
