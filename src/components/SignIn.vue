@@ -2,7 +2,7 @@
   <div id="sign-in">
     <template v-if="userInfo.loggedIn">
       <!-- <img class="user-photo" v-bind:src="userInfo.photoURL" /> -->
-      <div class="user-display-name">{{userInfo.displayName}}</div>
+      <div class="user-display-name" v-on:click="signOut">{{userInfo.displayName}}</div>
       <!-- <button id="sign-out" v-on:click="signOut">Sign Out</button> -->
     </template>
     <button v-else v-on:click="signIn">Sign In</button>
