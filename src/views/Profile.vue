@@ -1,23 +1,31 @@
 <template>
-  <div class="page profile">
-    <template v-if="userInfo.loggedIn">
-      <h1>{{userInfo.displayName}}</h1>
-      <p>User Id: {{userInfo.uid}}</p>
-      <p>User Email: {{userInfo.email}}</p>
-
+  <div class="view profile columns">
+    <div class="column">
+      <template v-if="userInfo.loggedIn">
+        <h1>{{userInfo.displayName}}</h1>
+        <dl>
+          <dt>User ID</dt>
+          <dd>{{userInfo.uid}}</dd>
+          <dt>User Email</dt>
+          <dd>{{userInfo.email}}</dd>
+        </dl>
+        <img class="user-photo" v-bind:src="userInfo.photoURL" />
+      </template>
+      <template v-else>
+        <h1>Sign In</h1>
+      </template>
+    </div>
+    <div class="column">
       <h1>Sketches</h1>
       <ul class="sketches">
         <li v-for="sketch in sketches" v-bind:key="sketch.id">
           <router-link
             :to="{ name: 'sketch', params: {userID: userInfo.uid, sketchID: sketch.id}}"
-          >{{ sketch.title }}—{{sketch.id}}</router-link>
+          >{{ sketch.title }}</router-link>
         </li>
       </ul>
       <button v-on:click="createSketch">Create Sketch</button>
-    </template>
-    <template v-else>
-      <h1>Sign In</h1>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -71,12 +79,36 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-.profile {
-  padding: 5px;
-}
 .user-photo {
-  max-width: 64px;
-  max-height: 64px;
+  max-width: 100%;
+}
+
+dd + dt {
+  margin-top: 10px;
+}
+
+dd {
+  font-weight: bold;
+  margin: 0;
+}
+
+.sketches {
+  padding-left: 0;
+}
+
+.sketches li {
+  list-style: none;
+  background: #ccc;
+  &:hover {
+    background: #acc;
+  }
+  margin-bottom: 5px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  a {
+    color: black;
+    text-decoration: none;
+  }
 }
 </style>
 

@@ -1,26 +1,29 @@
 <template>
-  <div class="about">
-    <h1>About SmudgeJS</h1>
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div class="menubar">
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.paragraph() }"
-          @click="commands.paragraph"
-        >P</button>
+  <div class="view about columns">
+    <div class="column">
+      <h1>About SmudgeJS</h1>
+      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+        <div class="menubar">
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.paragraph() }"
+            @click="commands.paragraph"
+          >P</button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-          @click="commands.heading({ level: 1 })"
-        >H1</button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            @click="commands.heading({ level: 1 })"
+          >H1</button>
 
-        <button class="menubar__button" @click="commands.undo">Undo</button>
+          <button class="menubar__button" @click="commands.undo">Undo</button>
 
-        <button class="menubar__button" @click="commands.redo">Redo</button>
-      </div>
-    </editor-menu-bar>
-    <editor-content class="editor" :editor="editor" />
+          <button class="menubar__button" @click="commands.redo">Redo</button>
+        </div>
+      </editor-menu-bar>
+      <editor-content class="editor" :editor="editor" />
+    </div>
+    <div class="column"></div>
   </div>
 </template>
 
@@ -57,8 +60,9 @@ export default {
   border-left: 1px solid red;
   padding: 10px;
   background: #eee;
+  min-height: 300px;
 }
-.is-active {
+.menubar .is-active {
   border: 10px solid red;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div id="sign-in">
     <template v-if="userInfo.loggedIn">
-      <img class="user-photo" v-bind:src="userInfo.photoURL" />
+      <!-- <img class="user-photo" v-bind:src="userInfo.photoURL" /> -->
       <div class="user-display-name">{{userInfo.displayName}}</div>
-      <button id="sign-out" v-on:click="signOut">Sign Out</button>
+      <!-- <button id="sign-out" v-on:click="signOut">Sign Out</button> -->
     </template>
     <button v-else v-on:click="signIn">Sign In</button>
   </div>
@@ -28,18 +28,4 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-#sign-in {
-  display: flex;
-  align-items: center;
-}
-.user-display-name {
-  padding: 0 10px;
-}
-.user-photo {
-  max-width: 64px;
-  max-height: 64px;
-}
-#sign-out {
-  height: 20px;
-}
 </style>

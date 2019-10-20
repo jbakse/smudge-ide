@@ -1,15 +1,18 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch">
-      <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
-      Sketch Id: {{sketchID}}
-      <br />Content:
-      <br />
-      <!-- <textarea v-model="sketch.content"></textarea> -->
-      <br />
-      <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
-
-      <button @click="saveSketch">Save Sketch</button>
+      <div class="columns">
+        <div class="column">
+          <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column input">
+          <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
+          <button @click="saveSketch">Save Sketch</button>
+        </div>
+        <div class="column output">output</div>
+      </div>
     </template>
   </div>
 </template>
@@ -89,21 +92,15 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-.sketch {
-  padding: 5px;
+.vue-codemirror {
+  margin-bottom: 10px;
 }
-
-textarea {
-  border: none;
-  border-left: 1px solid #ccc;
-  resize: none;
-  outline: none;
-  background-color: #f6f6f6;
-  font-size: 14px;
-  font-family: 'Monaco', courier, monospace;
+.input {
+}
+.output {
+  background: #eee;
   padding: 20px;
-  width: 50%;
-  height: 400px;
+  box-sizing: border-box;
 }
 </style>
 
