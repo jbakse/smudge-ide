@@ -5,8 +5,10 @@
       Sketch Id: {{sketchID}}
       <br />Content:
       <br />
-      <textarea v-model="sketch.content"></textarea>
+      <!-- <textarea v-model="sketch.content"></textarea> -->
       <br />
+      <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
+
       <button @click="saveSketch">Save Sketch</button>
     </template>
   </div>
@@ -15,6 +17,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
+
+import { codemirror } from 'vue-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript.js';
+import 'codemirror/theme/base16-dark.css';
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -29,9 +36,18 @@ type Sketch = {
 export default Vue.extend({
   name: 'Sketch',
   props: ['userID', 'sketchID'],
-
+  components: {
+    codemirror,
+  },
   data: () => ({
     sketch: null as Sketch,
+    cmOptions: {
+      tabSize: 4,
+      mode: 'text/javascript',
+      theme: 'base16-dark',
+      lineNumbers: true,
+      line: true,
+    },
   }),
 
   watch: {
