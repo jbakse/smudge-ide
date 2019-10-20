@@ -31,10 +31,18 @@ export default Vue.extend({
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Quicksand:500&display=swap');
 
+html {
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+}
+
 body {
   margin: 0;
   font-family: 'Quicksand', Helvetica, Arial, sans-serif;
   line-height: 1.6;
+
+  width: 100%;
 }
 
 .columns {
@@ -58,19 +66,26 @@ button {
   border-radius: 6px;
 }
 
+#app {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 #nav {
   padding: 20px;
   display: flex;
   justify-content: space-between;
   font-size: 20px;
-  border-bottom: 1px solid gray;
-  .logo {
-  }
+  border-bottom: 1px solid #7cc;
 
   .menu a {
     color: black;
     padding: 5px 30px;
     text-decoration: none;
   }
+}
+
+#content {
 }
 </style>

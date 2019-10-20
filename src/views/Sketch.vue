@@ -1,15 +1,15 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch">
-      <div class="columns">
+      <div class="header columns">
         <div class="column">
           <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
+          <button @click="saveSketch">Save Sketch</button>
         </div>
       </div>
-      <div class="columns">
+      <div class="editor columns">
         <div class="column input">
           <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
-          <button @click="saveSketch">Save Sketch</button>
         </div>
         <div class="column output">output</div>
       </div>
@@ -24,7 +24,7 @@ import Vue from 'vue';
 import { codemirror } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript.js';
-import 'codemirror/theme/base16-dark.css';
+import 'codemirror/theme/base16-light.css';
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -47,7 +47,7 @@ export default Vue.extend({
     cmOptions: {
       tabSize: 4,
       mode: 'text/javascript',
-      theme: 'base16-dark',
+      theme: 'base16-light',
       lineNumbers: true,
       line: true,
     },
@@ -92,15 +92,43 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-.vue-codemirror {
-  margin-bottom: 10px;
+.sketch {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
-.input {
+
+.header {
+  margin-bottom: 15px;
 }
+.editor {
+  flex: 1;
+}
+
+.editor .column {
+  position: relative;
+  flex: 1 1;
+}
+
 .output {
   background: #eee;
   padding: 20px;
   box-sizing: border-box;
+}
+
+.vue-codemirror {
+  margin-bottom: 10px;
+}
+</style>
+
+<style lang="scss">
+.CodeMirror {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
 }
 </style>
 

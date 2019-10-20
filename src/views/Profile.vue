@@ -98,16 +98,20 @@ dd {
 
 .sketches li {
   list-style: none;
-  background: #ccc;
-  &:hover {
-    background: #acc;
-  }
-  margin-bottom: 5px;
-  padding: 3px 10px;
-  border-radius: 6px;
+
   a {
+    display: block;
     color: black;
     text-decoration: none;
+    background: #ccc;
+    box-sizing: border-box;
+    &:hover {
+      background: #acc;
+    }
+    margin-bottom: 5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    width: 100%;
   }
 }
 </style>
