@@ -58,7 +58,6 @@ export default Vue.extend({
     sketchID: {
       immediate: true,
       handler(sketchID) {
-        console.log(this.userID, this.sketchID);
         this.$bind(
           'sketch',
           db

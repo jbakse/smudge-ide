@@ -64,14 +64,21 @@ export default Vue.extend({
 
   methods: {
     createSketch() {
-      if (user.userInfo.loggedIn) return;
+      if (!user.userInfo.loggedIn) return;
       db.collection('profiles')
         .doc(user.userInfo.uid)
         .collection('sketches')
         .add({
           title: 'untitled',
           content: '// Hello, SmudgeJS!',
-        });
+        })
+        .then((docRef) => {
+          this.$router.push({
+            name: 'sketch',
+            params: { userID: user.userInfo.uid, sketchID: docRef.id },
+          });
+        })
+        .catch((error) => {});
     },
   },
 });
