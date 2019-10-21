@@ -5,6 +5,7 @@
         <div class="column">
           <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
           <button @click="saveSketch">Save Sketch</button>
+          <button @click="deleteSketch">Delete Sketch</button>
         </div>
       </div>
       <div class="editor columns">
@@ -85,6 +86,16 @@ export default Vue.extend({
         .collection('sketches')
         .doc(this.sketchID)
         .update({ title: this.sketch.title, content: this.sketch.content });
+    },
+
+    deleteSketch() {
+      if (this.sketch == null) return;
+      db.collection('profiles')
+        .doc(this.userID)
+        .collection('sketches')
+        .doc(this.sketchID)
+        .delete();
+      this.$router.push({ name: 'profile', params: { userID: this.userID } });
     },
   },
 });

@@ -64,6 +64,7 @@ button {
   margin-bottom: 5px;
   padding: 3px 10px;
   border-radius: 6px;
+  margin-right: 10px;
 }
 
 #app {
