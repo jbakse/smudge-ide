@@ -78,7 +78,10 @@ export default Vue.extend({
             params: { userID: user.userInfo.uid, sketchID: docRef.id },
           });
         })
-        .catch((error) => {});
+        .catch((error) => {
+          console.log('error');
+          console.log(error);
+        });
     },
   },
 });
