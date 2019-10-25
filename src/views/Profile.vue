@@ -1,5 +1,5 @@
 <template>
-  <div class="view profile columns">
+  <div class="view profile row">
     <div class="column">
       <template v-if="userInfo.loggedIn">
         <h1>{{userInfo.displayName}}</h1>
@@ -17,13 +17,14 @@
     </div>
     <div class="column">
       <h1>Sketches</h1>
-      <ul class="sketches">
-        <li v-for="sketch in sketches" v-bind:key="sketch.id">
-          <router-link
-            :to="{ name: 'sketch', params: {userID: userInfo.uid, sketchID: sketch.id}}"
-          >{{ sketch.title }}</router-link>
-        </li>
-      </ul>
+
+      <router-link
+        v-for="sketch in sketches"
+        v-bind:key="sketch.id"
+        class="sketch"
+        :to="{ name: 'sketch', params: {userID: userInfo.uid, sketchID: sketch.id}}"
+      >{{ sketch.title }}</router-link>
+
       <button v-on:click="createSketch">Create Sketch</button>
     </div>
   </div>
@@ -89,40 +90,15 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
+@import '../scss/_shared.scss';
+
 .user-photo {
-  max-width: 100%;
+  width: 100%;
 }
 
-dd + dt {
-  margin-top: 10px;
-}
-
-dd {
-  font-weight: bold;
-  margin: 0;
-}
-
-.sketches {
-  padding-left: 0;
-}
-
-.sketches li {
-  list-style: none;
-
-  a {
-    display: block;
-    color: black;
-    text-decoration: none;
-    background: #ccc;
-    box-sizing: border-box;
-    &:hover {
-      background: #acc;
-    }
-    margin-bottom: 5px;
-    padding: 3px 10px;
-    border-radius: 6px;
-    width: 100%;
-  }
+.sketch {
+  @include button($utility-color, $alt-accent-color);
+  display: block;
 }
 </style>
 

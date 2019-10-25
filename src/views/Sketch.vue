@@ -1,18 +1,18 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch">
-      <div class="header columns">
+      <div class="header row">
         <div class="column">
           <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
           <button @click="saveSketch">Save Sketch</button>
           <button @click="deleteSketch">Delete Sketch</button>
         </div>
       </div>
-      <div class="editor columns">
+      <div class="editor row">
         <div class="column input">
           <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
         </div>
-        <div class="column output">output</div>
+        <div class="column output"></div>
       </div>
     </template>
   </div>
@@ -102,6 +102,8 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
+@import '../scss/_shared.scss';
+
 .sketch {
   flex: 1;
   display: flex;
@@ -109,25 +111,19 @@ export default Vue.extend({
 }
 
 .header {
-  margin-bottom: 15px;
+  margin-bottom: $vertical-margin;
 }
+
 .editor {
   flex: 1;
 }
 
 .editor .column {
   position: relative;
-  flex: 1 1;
 }
 
 .output {
-  background: #eee;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.vue-codemirror {
-  margin-bottom: 10px;
+  background: $utility-color;
 }
 </style>
 

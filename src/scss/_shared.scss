@@ -1,0 +1,51 @@
+$accent-color: #7cc;
+$alt-accent-color: #c7c;
+$utility-color: #ccc;
+$horizontal-margin: 10px;
+$vertical-margin: 20px;
+
+@mixin row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+
+  margin-bottom: $vertical-margin;
+}
+.row {
+  @include row;
+}
+
+@mixin column {
+  flex: 1;
+
+  margin-left: $horizontal-margin;
+  &:first-child {
+    margin-left: 0px;
+  }
+  margin-right: $horizontal-margin;
+  &:last-child {
+    margin-right: 0px;
+  }
+}
+.column {
+  @include column;
+}
+
+@mixin button($color: black, $hover-color: green) {
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  color: black;
+  background: $color;
+  &:hover {
+    background: $hover-color;
+  }
+  border-radius: 6px;
+  padding: 3px 10px;
+  margin-bottom: $vertical-margin * 0.5;
+  margin-right: $horizontal-margin;
+  font-size: 15px;
+  color: inherit;
+  text-decoration: none;
+}

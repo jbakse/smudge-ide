@@ -62,7 +62,14 @@ export default {
   background: #eee;
   min-height: 300px;
 }
+
 .menubar .is-active {
-  border: 10px solid red;
+  border: 1px solid red;
+}
+</style>
+
+<style lang="scss">
+.ProseMirror {
+  outline: none;
 }
 </style>

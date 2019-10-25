@@ -2,7 +2,9 @@
   <div id="app">
     <div id="nav">
       <div class="left">
-        <span class="logo">SmudgeJS</span>
+        <span class="logo">
+          <router-link :to="{ name: 'home' }">SmudgeJS</router-link>
+        </span>
       </div>
       <div class="menu">
         <router-link to="/">Home</router-link>
@@ -30,63 +32,63 @@ export default Vue.extend({
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Quicksand:500&display=swap');
+@import './scss/_shared.scss';
 
-html {
-  min-height: 100%;
-  box-sizing: border-box;
-  display: flex;
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
-body {
+dd {
+  font-weight: bold;
   margin: 0;
-  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-
-  width: 100%;
 }
 
-.columns {
-  display: flex;
-}
-.column {
-  margin: 0 20px;
-  flex: 1;
+dd + dt {
+  margin-top: 10px;
 }
 
 button {
-  border: none;
-  background: #7cc;
-  font-size: 15px;
-  &:hover {
-    background: #c7c;
-  }
-
-  margin-bottom: 5px;
-  padding: 3px 10px;
-  border-radius: 6px;
-  margin-right: 10px;
+  @include button($accent-color, $alt-accent-color);
 }
 
-#app {
+html {
+  min-height: 100%;
+  display: flex;
   box-sizing: border-box;
-  height: 100%;
+}
+
+body {
+  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+
+  margin: 0;
+  flex: 1;
+
   display: flex;
   flex-direction: column;
 }
-#nav {
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 20px;
-  border-bottom: 1px solid #7cc;
 
-  .menu a {
-    color: black;
-    padding: 5px 30px;
-    text-decoration: none;
-  }
+#app {
+  display: flex;
+  flex-direction: column;
+  @include column;
 }
 
-#content {
+#nav {
+  padding: $vertical-margin 0;
+  border-bottom: 1px solid $accent-color;
+  font-size: 20px;
+
+  display: flex;
+  justify-content: space-between;
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  .menu a {
+    padding: 5px 30px;
+  }
 }
 </style>
