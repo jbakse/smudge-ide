@@ -1,19 +1,14 @@
 <template>
-  <div class="view profile row">
+  <div v-if="userInfo.loggedIn" class="view profile row">
     <div class="column">
-      <template v-if="userInfo.loggedIn">
-        <h1>{{userInfo.displayName}}</h1>
-        <dl>
-          <dt>User ID</dt>
-          <dd>{{userInfo.uid}}</dd>
-          <dt>User Email</dt>
-          <dd>{{userInfo.email}}</dd>
-        </dl>
-        <img class="user-photo" v-bind:src="userInfo.photoURL" />
-      </template>
-      <template v-else>
-        <h1>Sign In</h1>
-      </template>
+      <h1>{{userInfo.displayName}}</h1>
+      <dl>
+        <dt>User ID</dt>
+        <dd>{{userInfo.uid}}</dd>
+        <dt>User Email</dt>
+        <dd>{{userInfo.email}}</dd>
+      </dl>
+      <img class="user-photo" v-bind:src="userInfo.photoURL" />
     </div>
     <div class="column">
       <h1>Sketches</h1>
