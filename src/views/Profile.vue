@@ -71,7 +71,21 @@ export default Vue.extend({
         .collection('sketches')
         .add({
           title: 'untitled',
-          content: '// Hello, SmudgeJS!',
+          content: `// require https://cdn.jsdelivr.net/npm/p5@0.7.3/lib/p5.min.js
+
+// Just a basic p5.js sketch.
+
+function setup() {
+  createCanvas(400, 400);
+  background(50, 50, 50);
+  noStroke();
+}
+
+function draw() {
+  fill(255, 0, 0);
+  ellipse(200, 200, 100, 100);
+}
+`,
         })
         .then((docRef) => {
           this.$router.push({

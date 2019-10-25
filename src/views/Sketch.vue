@@ -12,7 +12,7 @@
         <div class="column input">
           <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
         </div>
-        <div class="column output"></div>
+        <JSView class="column output" :source="sketch.content"></JSView>
       </div>
     </template>
   </div>
@@ -21,6 +21,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
+
+import JSView from '@/components/JSView.vue';
 
 import { codemirror } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -42,6 +44,7 @@ export default Vue.extend({
   props: ['userID', 'sketchID'],
   components: {
     codemirror,
+    JSView,
   },
   data: () => ({
     sketch: null as Sketch,
