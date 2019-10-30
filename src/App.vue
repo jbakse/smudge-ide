@@ -7,9 +7,13 @@
         </span>
       </div>
       <div class="menu">
-        <router-link to="/">Home</router-link>
-        <router-link to="/about">About</router-link>
-        <router-link to="/profile">Profile</router-link>
+        <router-link :to="{ name: 'home' }">Home</router-link>
+        <router-link :to="{ name: 'about' }">About</router-link>
+        <router-link :to="{ name: 'users' }">Users</router-link>
+        <router-link
+          v-if="userInfo.username"
+          :to="{ name: 'user', params: {username: userInfo.username}}"
+        >{{userInfo.displayName}}</router-link>
       </div>
       <SignIn class="signin" />
     </div>
@@ -20,12 +24,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import SignIn from '@/components/SignIn.vue'; // @ is an alias to /src
+import user from './user';
 
 export default Vue.extend({
   name: 'app',
   components: {
     SignIn,
   },
+  data: () => ({
+    userInfo: user.userInfo,
+  }),
 });
 </script>
 
@@ -51,6 +59,12 @@ dd + dt {
 
 button {
   @include button($accent-color, $alt-accent-color);
+}
+
+.alert {
+  background: #fcc;
+  border-left: 4px solid #f77;
+  padding: 5px;
 }
 
 html {
