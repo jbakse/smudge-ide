@@ -30,16 +30,19 @@
 <script lang="ts">
 import Vue from 'vue';
 import user from '../user';
-
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from '../firebase';
 
 const db = firebase.firestore();
 const users = db.collection('users');
 const sketches = db.collection('sketches');
 
+// @todo: create a users.js and sketches.js file that represent those collections
+
 interface UserProfile {
   id: string;
+  username: string;
+  displayName: string;
+  photoURL: string;
 }
 
 export default Vue.extend({
@@ -49,7 +52,7 @@ export default Vue.extend({
   data: () => ({
     user,
     userProfile: {} as UserProfile,
-    sketches: {},
+    sketches: {}, // @todo type this
   }),
 
   watch: {
@@ -57,29 +60,33 @@ export default Vue.extend({
       immediate: true,
       handler() {
         users
-          .where('username', '==', this.username || '')
-          .limit(1)
+          .where('username', '==', this.username)
+          .limit(1) // @todo enforce username uniqueness backend + frontend
           .get()
           .then((userProfile) => {
             if (!userProfile.empty) {
               this.$bind('userProfile', userProfile.docs[0].ref);
             } else {
               console.error(`Profile for ${this.username} not found.`);
+              // @todo show a user not found message to browser
             }
           });
       },
     },
     'userProfile.id': {
+      immediate: true,
       handler() {
+        if (!this.userProfile.id) return;
         this.$bind(
           'sketches',
-          sketches.where('ownerId', '==', this.userProfile.id || '')
+          sketches.where('ownerId', '==', this.userProfile.id)
         );
       },
     },
   },
 
   methods: {
+    // @todo this should be in sketches.js
     createSketch() {
       if (!user.loggedIn) return;
       sketches
