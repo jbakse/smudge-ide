@@ -1,6 +1,6 @@
 <template>
   <div id="sign-in">
-    <button v-if="userInfo.loggedIn" v-on:click="signOut">Sign Out</button>
+    <button v-if="user.loggedIn" v-on:click="signOut">Sign Out</button>
     <button v-else v-on:click="signIn">Sign In</button>
   </div>
 </template>
@@ -14,7 +14,7 @@ export default Vue.extend({
   props: {},
 
   data: () => ({
-    userInfo: user.userInfo,
+    user,
   }),
   methods: {
     signIn: user.signIn,

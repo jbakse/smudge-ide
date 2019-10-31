@@ -1,62 +1,50 @@
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import firebase from './firebase';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyCOeKDUm4ZbUJhkIs1-qmvoRe4HnlsjzG8',
-  authDomain: 'smudge-ide.firebaseapp.com',
-  databaseURL: 'https://smudge-ide.firebaseio.com',
-  projectId: 'smudge-ide',
-  storageBucket: 'smudge-ide.appspot.com',
-  messagingSenderId: '302457341437',
-  appId: '1:302457341437:web:6705b6cac3491435804594',
-};
-
-firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const users = db.collection('users');
 
-interface UserInfo {
-  loggedIn: boolean;
-  uid: string;
-  email: string | null;
-  username: string;
-  displayName: string | null;
-  photoURL: string | null;
+function generateUsername() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  let username = '';
+  for (let i = 0; i < 10; i++) {
+    username += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return username;
 }
 
 class User {
-  public userInfo: UserInfo;
+  public loggedIn: boolean = false;
+  public uid: string = '';
+  public email: string | null = '';
+  public username: string = '';
+  public displayName: string = '';
+  public photoURL: string = '';
+
   private user: firebase.User | null;
 
   constructor() {
     this.user = null;
-    this.userInfo = {
-      loggedIn: false,
-      uid: '',
-      username: '',
-      displayName: '',
-      email: '',
-      photoURL: '',
-    };
 
     firebase.auth().onAuthStateChanged((newUser) => {
+      this.user = newUser;
       if (newUser) {
         console.log('user signed in!');
-        this.userInfo.loggedIn = true;
-        this.userInfo.uid = newUser.uid;
-        this.userInfo.email = newUser.email;
+
+        this.loggedIn = true;
+        this.uid = newUser.uid;
+        this.email = newUser.email;
+
         this.loadUserProfile();
       } else {
         console.log('user signed out!');
-        this.userInfo.loggedIn = false;
-        this.userInfo.uid = '';
-        this.userInfo.email = '';
-        this.userInfo.username = '';
-        this.userInfo.displayName = '';
-        this.userInfo.photoURL = '';
+
+        this.loggedIn = false;
+        this.uid = '';
+        this.email = '';
+        this.username = '';
+        this.displayName = '';
+        this.photoURL = '';
       }
-      this.user = newUser;
     });
   }
 
@@ -71,26 +59,26 @@ class User {
 
   private loadUserProfile() {
     users
-      .doc(this.userInfo.uid)
+      .doc(this.uid)
       .get()
       .then((userDoc) => {
         if (!userDoc.exists && this.user) {
           const displayName = this.user.displayName || generateUsername();
           const username = displayName.replace(/\W/g, '');
-
-          users.doc(this.userInfo.uid).set({
+          const photoURL = this.user.photoURL || '';
+          users.doc(this.uid).set({
             username,
             displayName,
-            photoURL: this.user.photoURL,
+            photoURL,
           });
 
-          this.userInfo.username = username;
-          this.userInfo.displayName = displayName;
-          this.userInfo.photoURL = this.user.photoURL;
+          this.username = username;
+          this.displayName = displayName;
+          this.photoURL = photoURL;
         } else {
-          this.userInfo.username = userDoc.get('username');
-          this.userInfo.displayName = userDoc.get('displayName');
-          this.userInfo.photoURL = userDoc.get('photoURL');
+          this.username = userDoc.get('username');
+          this.displayName = userDoc.get('displayName');
+          this.photoURL = userDoc.get('photoURL');
         }
       })
       .catch((err) => {
@@ -101,12 +89,3 @@ class User {
 
 const user = new User();
 export default user;
-
-function generateUsername() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz';
-  let username = '';
-  for (let i = 0; i < 10; i++) {
-    username += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return username;
-}

@@ -11,9 +11,9 @@
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'users' }">Users</router-link>
         <router-link
-          v-if="userInfo.username"
-          :to="{ name: 'user', params: {username: userInfo.username}}"
-        >{{userInfo.displayName}}</router-link>
+          v-if="user.username"
+          :to="{ name: 'user', params: {username: user.username}}"
+        >{{user.displayName}}</router-link>
       </div>
       <SignIn class="signin" />
     </div>
@@ -32,7 +32,7 @@ export default Vue.extend({
     SignIn,
   },
   data: () => ({
-    userInfo: user.userInfo,
+    user,
   }),
 });
 </script>

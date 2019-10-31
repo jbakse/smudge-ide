@@ -90,7 +90,7 @@ export default Vue.extend({
       sketches.doc(this.sketchId).delete();
       this.$router.replace({
         name: 'user',
-        params: { username: user.userInfo.username },
+        params: { username: user.username },
       });
     },
   },

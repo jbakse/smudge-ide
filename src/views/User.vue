@@ -2,7 +2,7 @@
   <div class="view row">
     <div class="column">
       <h1>{{userProfile.displayName}}</h1>
-      <div v-if="userProfile.id == userInfo.uid" class="alert">This is you!</div>
+      <div v-if="userProfile.id == user.uid" class="alert">This is you!</div>
       <dl>
         <dt>userProfile:</dt>
         <dd>
@@ -21,7 +21,7 @@
         :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
       >{{ sketch.title }}</router-link>
 
-      <button v-if="userProfile.id == userInfo.uid" v-on:click="createSketch">Create Sketch</button>
+      <button v-if="userProfile.id == user.uid" v-on:click="createSketch">Create Sketch</button>
     </div>
   </div>
 </template>
@@ -47,14 +47,10 @@ export default Vue.extend({
   props: ['username'],
 
   data: () => ({
+    user,
     userProfile: {} as UserProfile,
-    userInfo: user.userInfo,
     sketches: {},
   }),
-
-  // firebase: {
-  //   sketches: sketches.where('ownerId', '==', this.userProfile.id),
-  // },
 
   watch: {
     username: {
@@ -85,11 +81,11 @@ export default Vue.extend({
 
   methods: {
     createSketch() {
-      if (!user.userInfo.loggedIn) return;
+      if (!user.loggedIn) return;
       sketches
         .add({
-          ownerId: user.userInfo.uid,
-          ownerUsername: user.userInfo.username,
+          ownerId: user.uid,
+          ownerUsername: user.username,
           title: 'untitled',
           source: `// require https://cdn.jsdelivr.net/npm/p5@0.7.3/lib/p5.min.js
 // Just a basic p5.js sketch.
