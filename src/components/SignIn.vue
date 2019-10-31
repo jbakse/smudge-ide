@@ -1,10 +1,6 @@
 <template>
   <div id="sign-in">
-    <template v-if="userInfo.loggedIn">
-      <!-- <img class="user-photo" v-bind:src="userInfo.photoURL" /> -->
-      <div class="user-display-name" v-on:click="signOut">{{userInfo.displayName}}</div>
-      <!-- <button id="sign-out" v-on:click="signOut">Sign Out</button> -->
-    </template>
+    <button v-if="user.loggedIn" v-on:click="signOut">Sign Out</button>
     <button v-else v-on:click="signIn">Sign In</button>
   </div>
 </template>
@@ -18,7 +14,7 @@ export default Vue.extend({
   props: {},
 
   data: () => ({
-    userInfo: user.userInfo,
+    user,
   }),
   methods: {
     signIn: user.signIn,
