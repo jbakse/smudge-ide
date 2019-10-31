@@ -3,16 +3,17 @@
     <template v-if="sketch">
       <div class="header row">
         <div class="column">
-          <h1 contenteditable @input="updateTitle" @blur="saveSketch">{{sketch.title}}</h1>
+          <h1 contenteditable @input="updateTitle">{{sketch.title}}</h1>
           <button @click="saveSketch">Save Sketch</button>
           <button @click="deleteSketch">Delete Sketch</button>
         </div>
       </div>
       <div class="editor row">
         <div class="column input">
-          <codemirror v-model="sketch.content" :options="cmOptions"></codemirror>
+          <codemirror v-model="sketch.source" :options="cmOptions"></codemirror>
         </div>
-        <JSView class="column output" :source="sketch.content"></JSView>
+
+        <JSView class="column output" :source="sketch.source"></JSView>
       </div>
     </template>
   </div>
@@ -21,7 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-
+import user from '../user';
 import JSView from '@/components/JSView.vue';
 
 import { codemirror } from 'vue-codemirror';
@@ -32,22 +33,25 @@ import 'codemirror/theme/base16-light.css';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 const db = firebase.firestore();
+const sketches = db.collection('sketches');
 
 type Sketch = {
   id: string;
   title: string;
-  content: string;
+  source: string;
 } | null;
 
 export default Vue.extend({
   name: 'Sketch',
-  props: ['userID', 'sketchID'],
+  props: ['sketchId'],
+
   components: {
     codemirror,
     JSView,
   },
+
   data: () => ({
-    sketch: null as Sketch,
+    sketch: {} as Sketch,
     cmOptions: {
       tabSize: 4,
       mode: 'text/javascript',
@@ -60,15 +64,8 @@ export default Vue.extend({
   watch: {
     sketchID: {
       immediate: true,
-      handler(sketchID) {
-        this.$bind(
-          'sketch',
-          db
-            .collection('profiles')
-            .doc(this.userID)
-            .collection('sketches')
-            .doc(this.sketchID)
-        );
+      handler(sketchId) {
+        this.$bind('sketch', sketches.doc(this.sketchId));
       },
     },
   },
@@ -83,21 +80,18 @@ export default Vue.extend({
 
     saveSketch() {
       if (this.sketch == null) return;
-      db.collection('profiles')
-        .doc(this.userID)
-        .collection('sketches')
-        .doc(this.sketchID)
-        .update({ title: this.sketch.title, content: this.sketch.content });
+      sketches
+        .doc(this.sketchId)
+        .update({ title: this.sketch.title, source: this.sketch.source });
     },
 
     deleteSketch() {
       if (this.sketch == null) return;
-      db.collection('profiles')
-        .doc(this.userID)
-        .collection('sketches')
-        .doc(this.sketchID)
-        .delete();
-      this.$router.push({ name: 'profile', params: { userID: this.userID } });
+      sketches.doc(this.sketchId).delete();
+      this.$router.replace({
+        name: 'user',
+        params: { username: user.userInfo.username },
+      });
     },
   },
 });

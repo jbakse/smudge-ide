@@ -2,7 +2,7 @@
   <div class="view row">
     <div class="column">
       <h1>{{userProfile.displayName}}</h1>
-      <div v-if="userProfile.username == userInfo.username" class="alert">This is you!</div>
+      <div v-if="userProfile.id == userInfo.uid" class="alert">This is you!</div>
       <dl>
         <dt>userProfile:</dt>
         <dd>
@@ -14,14 +14,14 @@
     <div class="column">
       <h1>Sketches</h1>
 
-      <!-- <router-link
+      <router-link
         v-for="sketch in sketches"
         v-bind:key="sketch.id"
         class="sketch"
-        :to="{ name: 'sketch', params: {userID: userInfo.uid, sketchID: sketch.id}}"
+        :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
       >{{ sketch.title }}</router-link>
 
-      <button v-on:click="createSketch">Create Sketch</button>-->
+      <button v-if="userProfile.id == userInfo.uid" v-on:click="createSketch">Create Sketch</button>
     </div>
   </div>
 </template>
@@ -36,21 +36,30 @@ import 'firebase/firestore';
 
 const db = firebase.firestore();
 const users = db.collection('users');
+const sketches = db.collection('sketches');
+
+interface UserProfile {
+  id: string;
+}
 
 export default Vue.extend({
   name: 'User',
   props: ['username'],
 
   data: () => ({
-    userProfile: {},
+    userProfile: {} as UserProfile,
     userInfo: user.userInfo,
-    // sketches: null,
+    sketches: {},
   }),
+
+  // firebase: {
+  //   sketches: sketches.where('ownerId', '==', this.userProfile.id),
+  // },
 
   watch: {
     username: {
       immediate: true,
-      handler(username) {
+      handler() {
         users
           .where('username', '==', this.username || '')
           .limit(1)
@@ -62,43 +71,48 @@ export default Vue.extend({
               console.error(`Profile for ${this.username} not found.`);
             }
           });
-        // this.$bind('sketches', profiles.doc(uid).collection('sketches'));
+      },
+    },
+    'userProfile.id': {
+      handler() {
+        this.$bind(
+          'sketches',
+          sketches.where('ownerId', '==', this.userProfile.id || '')
+        );
       },
     },
   },
 
   methods: {
-    //     createSketch() {
-    //       if (!user.userInfo.loggedIn) return;
-    //       db.collection('profiles')
-    //         .doc(user.userInfo.uid)
-    //         .collection('sketches')
-    //         .add({
-    //           title: 'untitled',
-    //           content: `// require https://cdn.jsdelivr.net/npm/p5@0.7.3/lib/p5.min.js
-    // // Just a basic p5.js sketch.
-    // function setup() {
-    //   createCanvas(400, 400);
-    //   background(50, 50, 50);
-    //   noStroke();
-    // }
-    // function draw() {
-    //   fill(255, 0, 0);
-    //   ellipse(200, 200, 100, 100);
-    // }
-    // `,
-    //         })
-    //         .then((docRef) => {
-    //           this.$router.push({
-    //             name: 'sketch',
-    //             params: { userID: user.userInfo.uid, sketchID: docRef.id },
-    //           });
-    //         })
-    //         .catch((error) => {
-    //           console.log('error');
-    //           console.log(error);
-    //         });
-    //     },
+    createSketch() {
+      if (!user.userInfo.loggedIn) return;
+      sketches
+        .add({
+          ownerId: user.userInfo.uid,
+          ownerUsername: user.userInfo.username,
+          title: 'untitled',
+          source: `// require https://cdn.jsdelivr.net/npm/p5@0.7.3/lib/p5.min.js
+// Just a basic p5.js sketch.
+function setup() {
+  createCanvas(400, 400);
+  background(50, 50, 50);
+  noStroke();
+}
+function draw() {
+  fill(255, 0, 0);
+  ellipse(200, 200, 100, 100);
+}`,
+        })
+        .then((docRef) => {
+          // this.$router.push({
+          //   name: 'sketch',
+          //   params: { userID: user.userInfo.uid, sketchID: docRef.id },
+          // });
+        })
+        .catch((err) => {
+          console.log('error creating sketch', err);
+        });
+    },
   },
 });
 </script>

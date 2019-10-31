@@ -54,7 +54,7 @@ const runJS = _.debounce((source: string) => {
 </html>`;
 
   const sketchFrame = document.getElementById('sketch-frame');
-  console.log(sketchFrame);
+
   (sketchFrame as HTMLIFrameElement).srcdoc = sketchSrcDoc;
 }, 100);
 </script>

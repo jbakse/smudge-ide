@@ -38,7 +38,7 @@ export default new Router({
     },
 
     {
-      path: '/sketch/:username?/:sketchName?',
+      path: '/sketch/:sketchId',
       name: 'sketch',
       props: true,
       component: () =>
