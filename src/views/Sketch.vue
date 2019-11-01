@@ -10,9 +10,8 @@
       </div>
       <div class="editor row">
         <div class="column input">
-          <codemirror v-model="sketch.source" :options="cmOptions"></codemirror>
+          <CodeEditor v-model="sketch.source" />
         </div>
-
         <JSView class="column output" :source="sketch.source"></JSView>
       </div>
     </template>
@@ -22,43 +21,25 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '../firebase/user';
+import user from '@/firebase/user';
+import CodeEditor from '@/components/CodeEditor.vue';
 import JSView from '@/components/JSView.vue';
 
-import { codemirror } from 'vue-codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/javascript/javascript.js';
-import 'codemirror/theme/base16-light.css';
+import { sketches, Sketch } from '../firebase/sketches';
 
-import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-const db = firebase.firestore();
-const sketches = db.collection('sketches');
-
-type Sketch = {
-  id: string;
-  title: string;
-  source: string;
-} | null;
 
 export default Vue.extend({
   name: 'Sketch',
   props: ['sketchId'],
 
   components: {
-    codemirror,
+    CodeEditor,
     JSView,
   },
 
   data: () => ({
     sketch: {} as Sketch,
-    cmOptions: {
-      tabSize: 4,
-      mode: 'text/javascript',
-      theme: 'base16-light',
-      lineNumbers: true,
-      line: true,
-    },
   }),
 
   watch: {
@@ -125,14 +106,6 @@ export default Vue.extend({
 </style>
 
 <style lang="scss">
-.CodeMirror {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-}
 </style>
 
 
