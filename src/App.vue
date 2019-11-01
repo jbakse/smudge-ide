@@ -58,7 +58,17 @@ dd + dt {
 }
 
 button {
-  @include button($accent-color, $alt-accent-color);
+  @include button($accent-color);
+}
+
+input.inherit {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 3px dotted $accent-color;
 }
 
 .alert {

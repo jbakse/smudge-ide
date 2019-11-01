@@ -3,9 +3,15 @@
     <template v-if="sketch">
       <div class="header">
         <div>
-          <h1 contenteditable @input="updateTitle">{{sketch.title}}</h1>
-          <button @click="saveSketch">Save Sketch</button>
-          <button @click="deleteSketch">Delete Sketch</button>
+          <h1>
+            <input class="inherit title" v-model="sketch.title" />
+          </h1>
+          <button
+            @click="saveSketch"
+            :disabled="dirty == false"
+            :class="{text: dirty == false}"
+          >Save Sketch</button>
+          <button @click="deleteSketch" class="text">Delete Sketch</button>
         </div>
       </div>
       <div class="editor row">
@@ -28,6 +34,8 @@ import { user } from '@/firebase/user';
 import CodeEditor from '@/components/CodeEditor.vue';
 import JSView from '@/components/JSView.vue';
 
+// @ todo hide buttons/editability if not owned
+
 import {
   sketches,
   saveSketch,
@@ -48,8 +56,10 @@ export default Vue.extend({
 
   data: () => ({
     sketch: {} as Sketch,
+    dirty: false,
   }),
 
+  computed: {},
   watch: {
     sketchId: {
       immediate: true,
@@ -57,18 +67,22 @@ export default Vue.extend({
         this.$bind('sketch', sketches.doc(this.sketchId));
       },
     },
+    sketch: {
+      deep: true,
+      handler(newSketch, oldSketch) {
+        if (oldSketch.id === newSketch.id) {
+          this.dirty = true;
+        }
+      },
+    },
   },
 
   methods: {
-    updateTitle(e: Event) {
-      const title = (e.target as Element).textContent;
-      if (title == null) return;
-      if (this.sketch == null) return;
-      this.sketch.title = title;
-    },
-
     saveSketch() {
-      saveSketch(this.sketchId, this.sketch);
+      saveSketch(this.sketchId, this.sketch).then(() => {
+        console.log('saved');
+        this.dirty = false;
+      });
     },
 
     deleteSketch() {
@@ -107,6 +121,10 @@ export default Vue.extend({
 
 .output {
   background: $utility-color;
+}
+
+input.title {
+  width: 50%;
 }
 </style>
 

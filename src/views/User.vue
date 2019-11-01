@@ -104,7 +104,7 @@ export default Vue.extend({
 }
 
 .sketch {
-  @include button($utility-color, $alt-accent-color);
+  @include button($utility-color);
   display: block;
 }
 </style>

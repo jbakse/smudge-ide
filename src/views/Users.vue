@@ -32,7 +32,7 @@ export default Vue.extend({
 @import '../scss/_shared.scss';
 
 .user {
-  @include button($utility-color, $alt-accent-color);
+  @include button($utility-color);
   display: block;
 }
 </style>
