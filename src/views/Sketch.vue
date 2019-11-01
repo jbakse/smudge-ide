@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '../user';
+import user from '../firebase/user';
 import JSView from '@/components/JSView.vue';
 
 import { codemirror } from 'vue-codemirror';

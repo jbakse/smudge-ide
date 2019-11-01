@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '../user';
+import user from '../firebase/user';
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';

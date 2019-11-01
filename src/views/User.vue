@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '../user';
-import firebase from '../firebase';
+import user from '../firebase/user';
+import firebase from '../firebase/firebase';
 
 const db = firebase.firestore();
 const users = db.collection('users');
