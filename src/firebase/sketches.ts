@@ -22,7 +22,7 @@ function draw() {
 }`;
 
 export function createSketch() {
-  if (!user.loggedIn) return Promise.reject(new Error('User not logged in'));
+  if (!user.loggedIn) return Promise.reject(new Error('User not logged in.'));
   return sketches
     .add({
       ownerId: user.uid,
@@ -34,4 +34,15 @@ export function createSketch() {
       console.log('error creating sketch', err);
       throw err;
     });
+}
+
+export function saveSketch(sketchId: string, sketch: Sketch) {
+  if (sketch == null) return Promise.reject(new Error('Sketch is "null".'));
+  return sketches
+    .doc(sketchId)
+    .update({ title: sketch.title, source: sketch.source });
+}
+
+export function deleteSketch(sketchId: string) {
+  return sketches.doc(sketchId).delete();
 }

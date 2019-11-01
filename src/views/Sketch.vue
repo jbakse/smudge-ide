@@ -1,8 +1,8 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch">
-      <div class="header row">
-        <div class="column">
+      <div class="header">
+        <div>
           <h1 contenteditable @input="updateTitle">{{sketch.title}}</h1>
           <button @click="saveSketch">Save Sketch</button>
           <button @click="deleteSketch">Delete Sketch</button>
@@ -25,7 +25,12 @@ import user from '@/firebase/user';
 import CodeEditor from '@/components/CodeEditor.vue';
 import JSView from '@/components/JSView.vue';
 
-import { sketches, Sketch } from '../firebase/sketches';
+import {
+  sketches,
+  saveSketch,
+  deleteSketch,
+  Sketch,
+} from '../firebase/sketches';
 
 import 'firebase/firestore';
 
@@ -60,18 +65,15 @@ export default Vue.extend({
     },
 
     saveSketch() {
-      if (this.sketch == null) return;
-      sketches
-        .doc(this.sketchId)
-        .update({ title: this.sketch.title, source: this.sketch.source });
+      saveSketch(this.sketchId, this.sketch);
     },
 
     deleteSketch() {
-      if (this.sketch == null) return;
-      sketches.doc(this.sketchId).delete();
-      this.$router.replace({
-        name: 'user',
-        params: { username: user.username },
+      deleteSketch(this.sketchId).then(() => {
+        this.$router.replace({
+          name: 'user',
+          params: { username: user.username },
+        });
       });
     },
   },
@@ -82,7 +84,7 @@ export default Vue.extend({
 <style scoped lang="scss">
 @import '../scss/_shared.scss';
 
-.sketch {
+.view.sketch {
   flex: 1;
   display: flex;
   flex-direction: column;
