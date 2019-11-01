@@ -4,7 +4,7 @@ const db = firebase.firestore();
 export const sketches = db.collection('sketches');
 
 export type Sketch = {
-  id: string;
+  id: string; // document name added as non-enumerable prop by vuefire
   title: string;
   source: string;
 } | null;

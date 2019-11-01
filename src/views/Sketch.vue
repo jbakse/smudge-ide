@@ -3,6 +3,7 @@
     <template v-if="sketch">
       <div class="header">
         <div>
+          {{sketchId}}!!{{sketch.id}}
           <h1 contenteditable @input="updateTitle">{{sketch.title}}</h1>
           <button @click="saveSketch">Save Sketch</button>
           <button @click="deleteSketch">Delete Sketch</button>
@@ -14,6 +15,9 @@
         </div>
         <JSView class="column output" :source="sketch.source"></JSView>
       </div>
+    </template>
+    <template v-else>
+      <h1>No sketch {{sketchId}}</h1>
     </template>
   </div>
 </template>
@@ -48,7 +52,7 @@ export default Vue.extend({
   }),
 
   watch: {
-    sketchID: {
+    sketchId: {
       immediate: true,
       handler(sketchId) {
         this.$bind('sketch', sketches.doc(this.sketchId));
