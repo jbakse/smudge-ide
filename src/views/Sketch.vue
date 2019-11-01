@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '@/firebase/user';
+import { user } from '@/firebase/user';
 import CodeEditor from '@/components/CodeEditor.vue';
 import JSView from '@/components/JSView.vue';
 

@@ -1,5 +1,5 @@
-import firebase from './firebase';
-import user from './user';
+import { firebase } from './firebase';
+import { user } from './user';
 const db = firebase.firestore();
 export const sketches = db.collection('sketches');
 

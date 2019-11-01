@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '@/firebase/user';
+import { user } from '@/firebase/user';
 
 export default Vue.extend({
   name: 'SignIn',

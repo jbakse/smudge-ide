@@ -34,9 +34,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '@/firebase/user';
+import { user } from '@/firebase/user';
 
 // @todo import *
+import { firebase } from '@/firebase/firebase';
+
 import { users, UserProfile } from '@/firebase/users';
 import { sketches, Sketch, createSketch } from '@/firebase/sketches';
 

@@ -1,4 +1,4 @@
-import firebase from './firebase';
+import { firebase } from './firebase';
 
 const db = firebase.firestore();
 const users = db.collection('users');
@@ -88,4 +88,4 @@ class User {
 }
 
 const user = new User();
-export default user;
+export { user };

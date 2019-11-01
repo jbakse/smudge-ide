@@ -23,16 +23,19 @@
       </editor-menu-bar>
       <editor-content class="editor" :editor="editor" />
     </div>
-    <div class="column"></div>
+    <div class="column">about</div>
   </div>
 </template>
 
 
-<script>
+<script lang="js">
 // Import the basic building blocks
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
 import { Heading, History } from 'tiptap-extensions';
-export default {
+
+import Vue from 'vue';
+
+export default Vue.extend({
   components: {
     EditorContent,
     EditorMenuBar,
@@ -51,7 +54,7 @@ export default {
     // Always destroy your editor instance when it's no longer needed
     this.editor.destroy();
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
