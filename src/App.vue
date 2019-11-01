@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import SignIn from '@/components/SignIn.vue'; // @ is an alias to /src
-import user from './firebase/user';
+import user from '@/firebase/user';
 
 export default Vue.extend({
   name: 'app',

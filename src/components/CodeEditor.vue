@@ -28,7 +28,6 @@ export default Vue.extend({
       //   scrollbarStyle: 'overlay',
     },
   }),
-  methods: {},
 });
 </script>
 

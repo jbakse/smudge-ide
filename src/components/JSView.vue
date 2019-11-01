@@ -9,9 +9,6 @@ import _ from 'lodash';
 export default Vue.extend({
   name: 'JSView',
   props: { source: { type: String, default: '' } },
-
-  data: () => ({}),
-  methods: {},
   watch: {
     source: {
       immediate: true,

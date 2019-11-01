@@ -13,13 +13,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '../firebase/user';
-
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
-
-const db = firebase.firestore();
-const users = db.collection('users');
+import user from '@/firebase/user';
+import { users } from '@/firebase/users';
 
 export default Vue.extend({
   name: 'Users',

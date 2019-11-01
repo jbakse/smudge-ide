@@ -34,9 +34,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import user from '../firebase/user';
-import { users, UserProfile } from '../firebase/users';
-import { sketches, Sketch, createSketch } from '../firebase/sketches';
+import user from '@/firebase/user';
+
+// @todo import *
+import { users, UserProfile } from '@/firebase/users';
+import { sketches, Sketch, createSketch } from '@/firebase/sketches';
 
 export default Vue.extend({
   name: 'User',

@@ -1,5 +1,5 @@
 <template>
-  <div class="view about columns">
+  <div class="view about row">
     <div class="column">
       <h1>About SmudgeJS</h1>
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
