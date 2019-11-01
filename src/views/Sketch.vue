@@ -3,7 +3,6 @@
     <template v-if="sketch">
       <div class="header">
         <div>
-          {{sketchId}}!!{{sketch.id}}
           <h1 contenteditable @input="updateTitle">{{sketch.title}}</h1>
           <button @click="saveSketch">Save Sketch</button>
           <button @click="deleteSketch">Delete Sketch</button>

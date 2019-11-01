@@ -38,9 +38,7 @@ export function createSketch() {
 
 export function saveSketch(sketchId: string, sketch: Sketch) {
   if (sketch == null) return Promise.reject(new Error('Sketch is "null".'));
-  return sketches
-    .doc(sketchId)
-    .update({ title: sketch.title, source: sketch.source });
+  return sketches.doc(sketchId).update({ ...sketch }); // ... spread operator used to exclude id (it is non-enumerable)
 }
 
 export function deleteSketch(sketchId: string) {
