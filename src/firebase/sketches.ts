@@ -3,6 +3,8 @@ import { user } from './user';
 const db = firebase.firestore();
 export const sketches = db.collection('sketches');
 
+// @todo add timestamps!
+
 export type Sketch = {
   id: string; // document name added as non-enumerable prop by vuefire
   title: string;

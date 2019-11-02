@@ -2,7 +2,13 @@
   <div class="view row">
     <template v-if="userProfile">
       <div class="column">
-        <h1>{{userProfile.displayName}}</h1>
+        <h1>
+          <input
+            v-can.disable="['write', userProfile]"
+            class="inherit title"
+            v-model="userProfile.displayName"
+          />
+        </h1>
         <div v-if="userProfile.id == user.uid" class="alert">This is you!</div>
         <dl>
           <dt>userProfile:</dt>
@@ -22,7 +28,11 @@
           :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
         >{{ sketch.title }}</router-link>
 
-        <button v-if="userProfile.id == user.uid" v-on:click="createSketch">Create Sketch</button>
+        <button
+          v-can="['write', userProfile]"
+          outv-if="userProfile.id == user.uid"
+          v-on:click="createSketch"
+        >Create Sketch</button>
       </div>
     </template>
     <template v-else>
@@ -104,7 +114,7 @@ export default Vue.extend({
 }
 
 .sketch {
-  @include button($utility-color);
+  @include button(#eee);
   display: block;
 }
 </style>

@@ -4,14 +4,15 @@
       <div class="header">
         <div>
           <h1>
-            <input class="inherit title" v-model="sketch.title" />
+            <input v-can.disable="['write', sketch]" class="inherit title" v-model="sketch.title" />
           </h1>
           <button
+            v-can="['write', sketch]"
             @click="saveSketch"
             :disabled="dirty == false"
             :class="{text: dirty == false}"
           >Save Sketch</button>
-          <button @click="deleteSketch" class="text">Delete Sketch</button>
+          <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button>
         </div>
       </div>
       <div class="editor row">
@@ -56,6 +57,7 @@ export default Vue.extend({
 
   data: () => ({
     sketch: {} as Sketch,
+    type: 'sketch',
     dirty: false,
   }),
 
@@ -95,6 +97,8 @@ export default Vue.extend({
     },
   },
 });
+
+// @todo prettier/eslint file instead of airbnb?
 </script>
 
 

@@ -1,9 +1,15 @@
 $accent-color: #77c;
 $alt-accent-color: #c7c;
 $utility-color: #ccc;
+$tint: rgba(0, 0, 0, 0.05);
 
 $horizontal-margin: 10px;
 $vertical-margin: 20px;
+
+@function brightness($color) {
+  $sum: red($color) + green($color) + blue($color);
+  @return percentage($sum / (255 * 3));
+}
 
 @mixin row {
   display: flex;
@@ -52,6 +58,9 @@ $vertical-margin: 20px;
 
   letter-spacing: 0.05em;
   color: white;
+  @if brightness($color) > 65% {
+    color: black;
+  }
 
   &:not(.text) {
     background: $color;
@@ -69,7 +78,7 @@ $vertical-margin: 20px;
     color: $color;
     background: rgba(0, 0, 0, 0);
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
+      background: $tint;
     }
     &:disabled {
       background: rgba(0, 0, 0, 0);

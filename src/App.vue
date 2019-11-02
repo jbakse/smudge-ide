@@ -66,9 +66,19 @@ input.inherit {
   font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
+  color: inherit;
   width: 100%;
   border: none;
   border-bottom: 3px dotted $accent-color;
+  &:focus {
+    background-color: $tint;
+  }
+}
+
+input:disabled.inherit {
+  border: none;
+  background: none;
+  color: inherit;
 }
 
 .alert {
@@ -102,7 +112,8 @@ body {
 
 #nav {
   padding: $vertical-margin 0;
-  border-bottom: 1px solid $accent-color;
+
+  border-bottom: 1px solid black;
   font-size: 20px;
 
   display: flex;
