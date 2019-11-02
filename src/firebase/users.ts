@@ -8,3 +8,10 @@ export type UserProfile = {
   displayName: string;
   photoURL: string;
 } | null;
+
+export function saveProfile(profile: UserProfile) {
+  // @todo changing username needs to update username on sketches
+  if (profile == null) return Promise.reject(new Error('Profile is "null".'));
+  return users.doc(profile.id).update({ ...profile });
+  // ... spread operator used to exclude id (it is non-enumerable)
+}

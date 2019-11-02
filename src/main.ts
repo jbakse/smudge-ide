@@ -19,6 +19,10 @@ Vue.use(Acl, user, (acl: any) => {
     return u.uid === profile.id;
   });
 
+  acl.rule('be', 'profile', (u: any, profile: any) => {
+    return u.uid === profile.id;
+  });
+
   acl.subjectMapper = (subject: any) => {
     let mappedValue = 'unknown';
     if (typeof subject === 'string') mappedValue = subject;

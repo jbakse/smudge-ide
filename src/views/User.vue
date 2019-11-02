@@ -1,44 +1,60 @@
 <template>
-  <div class="view row">
+  <div class="view user">
     <template v-if="userProfile">
-      <div class="column">
-        <h1>
-          <input
-            v-can.disable="['write', userProfile]"
-            class="inherit title"
-            v-model="userProfile.displayName"
-          />
-        </h1>
-        <div v-if="userProfile.id == user.uid" class="alert">This is you!</div>
-        <dl>
-          <dt>userProfile:</dt>
-          <dd>
-            <pre>{{userProfile}}</pre>
-          </dd>
-        </dl>
-        <img class="user-photo" v-bind:src="userProfile.photoURL" />
+      <div class="header">
+        <div>
+          <h1 class="display-name">
+            <input
+              v-can.disable="['write', userProfile]"
+              class="inherit title"
+              v-model="userProfile.displayName"
+            />
+          </h1>
+          <h2 class="username">
+            <input
+              v-can.disable="['write', userProfile]"
+              class="inherit title"
+              v-model="userProfile.username"
+            />
+          </h2>
+          <button
+            v-can="['write', userProfile]"
+            @click="saveProfile"
+            :disabled="dirty == false"
+            :class="{text: dirty == false}"
+          >Save Profile</button>
+          <!-- <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button> -->
+        </div>
       </div>
-      <div class="column">
-        <h1>Sketches</h1>
+      <div class="row">
+        <div class="column">
+          <h2>Profile</h2>
+          <img class="user-photo" v-bind:src="userProfile.photoURL" />
+        </div>
+        <div class="column">
+          <h2>Sketches</h2>
 
-        <router-link
-          v-for="sketch in sketches"
-          v-bind:key="sketch.id"
-          class="sketch"
-          :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
-        >{{ sketch.title }}</router-link>
+          <router-link
+            v-for="sketch in sketches"
+            v-bind:key="sketch.id"
+            class="sketch"
+            :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
+          >{{ sketch.title }}</router-link>
 
-        <button
-          v-can="['write', userProfile]"
-          outv-if="userProfile.id == user.uid"
-          v-on:click="createSketch"
-        >Create Sketch</button>
+          <button
+            v-can="['write', userProfile]"
+            outv-if="userProfile.id == user.uid"
+            v-on:click="createSketch"
+          >Create Sketch</button>
+        </div>
       </div>
     </template>
     <template v-else>
       <h1>No user named {{username}}</h1>
     </template>
   </div>
+
+  <!-- <div v-can="['be', userProfile]" class="alert">This is you!</div> -->
 </template>
 
 
@@ -46,7 +62,7 @@
 import Vue from 'vue';
 import { user } from '@/firebase/user';
 import { firebase } from '@/firebase/firebase';
-import { users, UserProfile } from '@/firebase/users';
+import { users, UserProfile, saveProfile } from '@/firebase/users';
 import { sketches, Sketch, createSketch } from '@/firebase/sketches';
 
 export default Vue.extend({
@@ -55,11 +71,21 @@ export default Vue.extend({
 
   data: () => ({
     user,
+    dirty: false,
     userProfile: {} as UserProfile,
     sketches: {} as Sketch,
   }),
 
   watch: {
+    userProfile: {
+      deep: true,
+      handler(newProfile, oldProfile) {
+        if (oldProfile.id === newProfile.id) {
+          this.dirty = true;
+        }
+      },
+    },
+
     username: {
       immediate: true,
       handler() {
@@ -88,7 +114,17 @@ export default Vue.extend({
     },
   },
 
+  // @todo think about where to get the id passed to saveProfile and saveSketch
+  // should i get it from the router? should i get it from the displayed document (probably)?
+  // are the acl rules based on this, check that all code uses the same way
+
   methods: {
+    saveProfile() {
+      saveProfile(this.userProfile).then(() => {
+        console.log('saved');
+        this.dirty = false;
+      });
+    },
     createSketch() {
       createSketch()
         .then((docRef) => {
@@ -116,6 +152,16 @@ export default Vue.extend({
 .sketch {
   @include button(#eee);
   display: block;
+}
+
+.display-name {
+  width: 50%;
+}
+
+.username {
+  width: 25%;
+  font-weight: normal;
+  font-size: 18px;
 }
 </style>
 
