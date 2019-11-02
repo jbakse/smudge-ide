@@ -81,7 +81,7 @@ export default Vue.extend({
 
   methods: {
     saveSketch() {
-      saveSketch(this.sketchId, this.sketch).then(() => {
+      saveSketch(this.sketch).then(() => {
         console.log('saved');
         this.dirty = false;
       });
