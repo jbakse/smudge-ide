@@ -3,27 +3,44 @@
     <template v-if="userProfile">
       <div class="header">
         <div>
-          <h1 class="display-name">
-            <input
-              v-can.disable="['write', userProfile]"
-              class="inherit title"
-              v-model="userProfile.displayName"
-            />
-          </h1>
-          <h2 class="username">
-            <input
-              v-can.disable="['write', userProfile]"
-              class="inherit title"
-              v-model="userProfile.username"
-            />
-          </h2>
-          <button
-            v-can="['write', userProfile]"
-            @click="saveProfile"
-            :disabled="dirty == false"
-            :class="{text: dirty == false}"
-          >Save Profile</button>
-          <!-- <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button> -->
+          <ValidationObserver
+            ref="observer"
+            v-slot="{ pristine, dirty, valid, invalid, pending, touched }"
+          >
+            <h1 class="display-name">
+              <ValidationProvider
+                name="display name"
+                rules="max:30|min:4"
+                v-slot="{ errors, classes }"
+              >
+                <input
+                  v-model="userProfile.displayName"
+                  v-can.disable="['write', userProfile]"
+                  class="inherit title"
+                  :class="classes"
+                />
+                <ValidationErrors :errors="errors" />
+              </ValidationProvider>
+            </h1>
+
+            <h2 class="username">
+              <ValidationProvider name="username" rules="max:20|min:4" v-slot="{ errors, classes }">
+                <input
+                  v-can.disable="['write', userProfile]"
+                  class="inherit title"
+                  v-model="userProfile.username"
+                />
+                <ValidationErrors :errors="errors" />
+              </ValidationProvider>
+            </h2>
+            <template v-can="['write', userProfile]">
+              <button
+                :class="{text: dirty == false}"
+                :disabled="dirty == false"
+                @click="saveProfile"
+              >Save Profile</button>
+            </template>
+          </ValidationObserver>
         </div>
       </div>
       <div class="row">
@@ -67,20 +84,20 @@ export default Vue.extend({
 
   data: () => ({
     auth,
-    dirty: false,
+
     userProfile: {} as UserProfile,
     sketches: {} as Sketch,
   }),
 
   watch: {
-    userProfile: {
-      deep: true,
-      handler(newProfile, oldProfile) {
-        if (oldProfile.id === newProfile.id) {
-          this.dirty = true;
-        }
-      },
-    },
+    // userProfile: {
+    //   deep: true,
+    //   handler(newProfile, oldProfile) {
+    //     if (oldProfile.id === newProfile.id) {
+    //       this.dirty = true;
+    //     }
+    //   },
+    // },
 
     username: {
       immediate: true,
@@ -115,10 +132,18 @@ export default Vue.extend({
   // are the acl rules based on this, check that all code uses the same way
 
   methods: {
-    saveProfile() {
+    async saveProfile() {
+      const isValid = await (this.$refs.observer as any).validate();
+      if (!isValid) {
+        console.error('form not valid!');
+        return;
+      }
       saveProfile(this.userProfile).then(() => {
         console.log('saved');
-        this.dirty = false;
+        requestAnimationFrame(() => {
+          (this.$refs.observer as any).reset();
+        });
+        // this.dirty = false;
       });
     },
     createSketch() {
@@ -139,7 +164,7 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-@import '../scss/_shared.scss';
+@import '@/scss/_shared.scss';
 
 .user-photo {
   width: 100%;

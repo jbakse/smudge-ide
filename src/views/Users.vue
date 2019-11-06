@@ -28,7 +28,7 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-@import '../scss/_shared.scss';
+@import '@/scss/_shared.scss';
 
 .user {
   @include button($utility-color);

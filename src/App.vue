@@ -40,7 +40,7 @@ export default Vue.extend({
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Quicksand:500&display=swap');
-@import './scss/_shared.scss';
+@import '@/scss/_shared.scss';
 
 html {
   min-height: 100%;

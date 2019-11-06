@@ -103,7 +103,7 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-@import '../scss/_shared.scss';
+@import '@/scss/_shared.scss';
 
 .view.sketch {
   flex: 1;
