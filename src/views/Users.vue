@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { user } from '@/firebase/user';
 import { users } from '@/firebase/users';
 
 export default Vue.extend({

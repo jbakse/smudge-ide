@@ -41,11 +41,7 @@
             :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
           >{{ sketch.title }}</router-link>
 
-          <button
-            v-can="['write', userProfile]"
-            outv-if="userProfile.id == user.uid"
-            v-on:click="createSketch"
-          >Create Sketch</button>
+          <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
         </div>
       </div>
     </template>
@@ -60,7 +56,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { user } from '@/firebase/user';
+import { auth } from '@/firebase/auth';
 import { firebase } from '@/firebase/firebase';
 import { users, UserProfile, saveProfile } from '@/firebase/users';
 import { sketches, Sketch, createSketch } from '@/firebase/sketches';
@@ -70,7 +66,7 @@ export default Vue.extend({
   props: ['username'],
 
   data: () => ({
-    user,
+    auth,
     dirty: false,
     userProfile: {} as UserProfile,
     sketches: {} as Sketch,

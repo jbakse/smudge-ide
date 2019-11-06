@@ -12,7 +12,7 @@ function generateUsername() {
   return username;
 }
 
-class User {
+class Auth {
   public loggedIn: boolean = false;
   public uid: string = '';
   public email: string | null = '';
@@ -87,6 +87,6 @@ class User {
   }
 }
 
-const user = new User();
+const auth = new Auth();
 
-export { user };
+export { auth };

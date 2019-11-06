@@ -11,9 +11,9 @@
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'users' }">Users</router-link>
         <router-link
-          v-if="user.username"
-          :to="{ name: 'user', params: {username: user.username}}"
-        >{{user.displayName}}</router-link>
+          v-if="auth.username"
+          :to="{ name: 'user', params: {username: auth.username}}"
+        >{{auth.displayName}}</router-link>
       </div>
       <SignIn class="signin" />
     </div>
@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import SignIn from '@/components/SignIn.vue';
-import { user } from '@/firebase/user';
+import { auth } from '@/firebase/auth';
 
 export default Vue.extend({
   name: 'app',
@@ -32,7 +32,7 @@ export default Vue.extend({
     SignIn,
   },
   data: () => ({
-    user,
+    auth,
   }),
 });
 </script>
@@ -42,51 +42,6 @@ export default Vue.extend({
 @import url('https://fonts.googleapis.com/css?family=Quicksand:500&display=swap');
 @import './scss/_shared.scss';
 
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
-dd {
-  font-weight: bold;
-  margin: 0;
-}
-
-dd + dt {
-  margin-top: 10px;
-}
-
-button {
-  @include button($accent-color);
-}
-
-input.inherit {
-  font-family: inherit;
-  font-size: inherit;
-  font-style: inherit;
-  font-weight: inherit;
-  color: inherit;
-  width: 100%;
-  border: none;
-  border-bottom: 3px dotted $accent-color;
-  &:focus {
-    background-color: $tint;
-  }
-}
-
-input:disabled.inherit {
-  border: none;
-  background: none;
-  color: inherit;
-}
-
-.alert {
-  background: #fcc;
-  border-left: 4px solid #f77;
-  padding: 5px;
-}
-
 html {
   min-height: 100%;
   display: flex;
@@ -94,9 +49,6 @@ html {
 }
 
 body {
-  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
-  line-height: 1.6;
-
   margin: 0;
   flex: 1;
 

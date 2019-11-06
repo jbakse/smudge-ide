@@ -1,7 +1,7 @@
 $accent-color: #77c;
 $alt-accent-color: #c7c;
 $utility-color: #ccc;
-$tint: rgba(0, 0, 0, 0.05);
+$light-gray: #eee;
 
 $horizontal-margin: 10px;
 $vertical-margin: 20px;
@@ -16,9 +16,9 @@ $vertical-margin: 20px;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-
   margin-bottom: $vertical-margin;
 }
+
 .row {
   @include row;
 }
@@ -76,9 +76,13 @@ $vertical-margin: 20px;
 
   &.text {
     color: $color;
-    background: rgba(0, 0, 0, 0);
+    background: $light-gray;
     &:hover {
-      background: $tint;
+      color: white;
+      @if brightness($color) > 65% {
+        color: black;
+      }
+      background: $color;
     }
     &:disabled {
       background: rgba(0, 0, 0, 0);
@@ -91,4 +95,53 @@ $vertical-margin: 20px;
   }
 
   transition: color 0.2s, background-color 0.2s;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+dd {
+  font-weight: bold;
+  margin: 0;
+}
+
+dd + dt {
+  margin-top: 10px;
+}
+
+button {
+  @include button($accent-color);
+}
+
+input.inherit {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  color: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 3px dotted $accent-color;
+  &:focus {
+    background-color: $light-gray;
+  }
+}
+
+input:disabled.inherit {
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.alert {
+  background: #fcc;
+  border-left: 4px solid #f77;
+  padding: 5px;
 }

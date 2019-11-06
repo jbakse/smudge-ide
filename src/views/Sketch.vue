@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { user } from '@/firebase/user';
+import { auth } from '@/firebase/auth';
 import CodeEditor from '@/components/CodeEditor.vue';
 import JSView from '@/components/JSView.vue';
 
@@ -91,7 +91,7 @@ export default Vue.extend({
       deleteSketch(this.sketchId).then(() => {
         this.$router.replace({
           name: 'user',
-          params: { username: user.username },
+          params: { username: auth.username },
         });
       });
     },

@@ -1,5 +1,5 @@
 import { firebase } from './firebase';
-import { user } from './user';
+import { auth } from './auth';
 const db = firebase.firestore();
 export const sketches = db.collection('sketches');
 
@@ -24,11 +24,11 @@ function draw() {
 }`;
 
 export function createSketch() {
-  if (!user.loggedIn) return Promise.reject(new Error('User not logged in.'));
+  if (!auth.loggedIn) return Promise.reject(new Error('User not logged in.'));
   return sketches
     .add({
-      ownerId: user.uid,
-      ownerUsername: user.username,
+      ownerId: auth.uid,
+      ownerUsername: auth.username,
       title: 'untitled',
       source: sketchTemplate,
     })
