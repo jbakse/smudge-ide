@@ -3,7 +3,7 @@
     <template v-if="userProfile">
       <div class="header">
         <div>
-          <ValidationObserver ref="observer" v-slot="{ dirty, pristine, invalid }">
+          <ValidationObserver ref="observer" v-slot="{ dirty, invalid }">
             <h1 class="display-name">
               <VeeInput
                 :disabled="!$can('write', userProfile)"
@@ -25,9 +25,9 @@
             </h2>
 
             <button
-              v-if="$can('write', userProfile) && dirty"
+              v-if="$can('write', userProfile)"
               :class="{invalid}"
-              :disabled="pristine || invalid"
+              :disabled="!dirty || invalid"
               @click="saveProfile"
             >Save Profile</button>
           </ValidationObserver>

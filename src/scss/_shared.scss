@@ -129,6 +129,7 @@ input.inherit,
   &:focus {
     background-color: $light-gray;
   }
+  outline: none;
 }
 
 input:disabled.inherit {
@@ -139,4 +140,12 @@ input:disabled.inherit {
 
 .inline-block {
   display: inline-block;
+}
+
+a.simple {
+  text-decoration: none;
+  color: $accent-color;
+  &:hover {
+    text-decoration: underline;
+  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <codemirror v-bind:value="value" v-on:input="$emit('input', $event)" :options="cmOptions"></codemirror>
+  <codemirror v-bind:value="value" v-on:input="emit" :options="cmOptions"></codemirror>
 </template>
 
 <script lang="ts">
@@ -28,7 +28,15 @@ export default Vue.extend({
       //   scrollbarStyle: 'overlay',
     },
   }),
+  methods: {
+    emit($event: any) {
+      console.log('emit');
+      this.$emit('input', $event);
+    },
+  },
 });
+
+// $emit('input', $event);
 </script>
 
 <style lang="scss">

@@ -1,8 +1,8 @@
 <template>
   <div class="view sketch">
-    <template v-if="sketch">
-      <div class="header">
-        <ValidationObserver ref="observer" v-slot="{ pristine, invalid, dirty }">
+    <template v-if="sketch.id">
+      <ValidationObserver ref="observer" v-slot="{ invalid, dirty }" class="observer">
+        <div class="header">
           <h1>
             <VeeInput
               :disabled="!$can('write', sketch)"
@@ -13,26 +13,39 @@
             />
           </h1>
 
+          <div v-if="!$can('write', sketch)" class="owner-username">
+            by
+            <router-link
+              class="simple"
+              :to="{ name: 'user', params: {username: sketch.ownerUsername}}"
+            >{{sketch.ownerUsername}}</router-link>
+          </div>
+
           <button
-            v-if="$can('write', sketch) && dirty"
+            v-if="$can('write', sketch)"
             :class="{invalid}"
-            :disabled="pristine || invalid"
+            :disabled="!dirty || invalid"
             @click="saveSketch"
           >Save Sketch</button>
 
           <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button>
-        </ValidationObserver>
-      </div>
-      <div class="editor row">
-        <div class="column input">
-          <CodeEditor v-model="sketch.source" />
         </div>
-        <JSView class="column output" :source="sketch.source"></JSView>
-      </div>
+        <div class="editor row">
+          <div class="column input">
+            <ValidationProvider name="source" rules="max:33088" v-slot="{ errors, classes }">
+              <ValidationErrors :errors="errors" />
+              <div class="wrap">
+                <CodeEditor v-model="sketch.source" />
+              </div>
+            </ValidationProvider>
+          </div>
+          <JSView class="column output" :source="sketch.source"></JSView>
+        </div>
+      </ValidationObserver>
     </template>
-    <template v-else>
+    <!-- <template v-else>
       <h1>No sketch {{sketchId}}</h1>
-    </template>
+    </template>-->
   </div>
 </template>
 
@@ -68,11 +81,21 @@ export default Vue.extend({
   }),
 
   computed: {},
+
   watch: {
+    // watch for timestamp updates (we reset data from DB) and clear the dirty state
+    'sketch.updated': {
+      handler(timestamp) {
+        // setTimeout(() => (this.$refs.observer as any).reset(), 0);
+      },
+    },
+
     sketchId: {
       immediate: true,
       handler(sketchId) {
-        this.$bind('sketch', sketches.doc(this.sketchId));
+        this.$bind('sketch', sketches.doc(this.sketchId), {
+          wait: true,
+        }).then();
       },
     },
   },
@@ -129,6 +152,17 @@ export default Vue.extend({
 
 input.title {
   width: 50%;
+}
+
+.observer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  position: relative;
+  height: 100%;
 }
 </style>
 
