@@ -56,7 +56,10 @@
               v-bind:key="sketch.id"
               class="sketch sketches-item"
               :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
-            >{{ sketch.title }}</router-link>
+            >
+              <span class="title">{{ sketch.title }}</span>
+              <span class="updated">{{ formatTime(sketch.updated) }}</span>
+            </router-link>
           </transition-group>
           <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
         </div>
@@ -77,6 +80,7 @@ import { auth } from '@/firebase/auth';
 import { firebase } from '@/firebase/firebase';
 import { users, UserProfile, saveProfile } from '@/firebase/users';
 import { sketches, Sketch, createSketch } from '@/firebase/sketches';
+import { firestore } from 'firebase';
 
 export default Vue.extend({
   name: 'User',
@@ -121,7 +125,9 @@ export default Vue.extend({
         if (!(this.userProfile && this.userProfile.id)) return;
         this.$bind(
           'sketches',
-          sketches.where('ownerId', '==', this.userProfile.id)
+          sketches
+            .where('ownerId', '==', this.userProfile.id)
+            .orderBy('updated', 'desc')
         );
       },
     },
@@ -132,6 +138,10 @@ export default Vue.extend({
   // are the acl rules based on this, check that all code uses the same way
 
   methods: {
+    formatTime(time: firestore.Timestamp) {
+      return time && new Date(time.seconds * 1000).toLocaleString();
+    },
+
     async saveProfile() {
       const isValid = await (this.$refs.observer as any).validate();
       if (!isValid) {
@@ -187,9 +197,14 @@ export default Vue.extend({
 
 .sketches-item {
   transition: all 1s;
-
   margin-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  .updated {
+    color: #aaa;
+  }
 }
+
 .sketches-enter,
 .sketches-leave-to {
   opacity: 0;

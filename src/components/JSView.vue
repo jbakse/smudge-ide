@@ -47,6 +47,7 @@ function runJS(source: string, target: HTMLElement) {
 <head>
     <base target="_parent">
     ${libraries}
+    <style>body{margin:10px;}</style>
 </head>
 <body>
     <script>${source}<\/script>
@@ -55,12 +56,6 @@ function runJS(source: string, target: HTMLElement) {
 
   const sketchFrame = document.createElement('iframe');
   sketchFrame.classList.add('jsview-iframe');
-  // document.getElementById('sketch-frame');
-
-  console.log('log');
-
-  // @todo try building the iframe in js and attaching
-  // https://stackoverflow.com/questions/13214419/alternatives-to-iframe-srcdoc
 
   (sketchFrame as HTMLIFrameElement).srcdoc = sketchSrcDoc;
   target.innerHTML = '';
@@ -70,7 +65,6 @@ function runJS(source: string, target: HTMLElement) {
 
 <style lang="scss">
 .jsview-wrapper {
-  border: 1px dotted red;
   display: flex;
 }
 .jsview-iframe {

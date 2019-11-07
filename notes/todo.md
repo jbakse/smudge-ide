@@ -6,7 +6,7 @@
 
 # Broad Features
 
-- Add timestamps to sketches
+- x Add timestamps to sketches
 
 - Fronted Validation
 
