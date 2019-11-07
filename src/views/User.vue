@@ -3,7 +3,7 @@
     <template v-if="userProfile">
       <div class="header">
         <div>
-          <ValidationObserver ref="observer" v-slot="{ pristine, invalid }">
+          <ValidationObserver ref="observer" v-slot="{ dirty, pristine, invalid }">
             <h1 class="display-name">
               <VeeInput
                 :disabled="!$can('write', userProfile)"
@@ -23,39 +23,13 @@
                 v-model="userProfile.username"
               />
             </h2>
-            <!-- <h1 class="display-name">
-              <ValidationProvider
-                name="display name"
-                rules="max:30|min:4"
-                v-slot="{ errors, classes }"
-              >
-                <input
-                  v-model="userProfile.displayName"
-                  v-can.disable="['write', userProfile]"
-                  class="inherit title"
-                  :class="classes"
-                />
-                <ValidationErrors :errors="errors" />
-              </ValidationProvider>
-            </h1>-->
 
-            <!-- <h2 class="username">
-              <ValidationProvider name="username" rules="max:20|min:4" v-slot="{ errors, classes }">
-                <input
-                  v-can.disable="['write', userProfile]"
-                  class="inherit title"
-                  v-model="userProfile.username"
-                />
-                <ValidationErrors :errors="errors" />
-              </ValidationProvider>
-            </h2>-->
-            <div v-can="['write', userProfile]">
-              <button
-                :class="{text: pristine || invalid}"
-                :disabled="pristine || invalid"
-                @click="saveProfile"
-              >Save Profile</button>
-            </div>
+            <button
+              v-if="$can('write', userProfile) && dirty"
+              :class="{invalid}"
+              :disabled="pristine || invalid"
+              @click="saveProfile"
+            >Save Profile</button>
           </ValidationObserver>
         </div>
       </div>

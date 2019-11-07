@@ -57,40 +57,32 @@ $vertical-margin: 20px;
   font-family: inherit;
 
   letter-spacing: 0.05em;
+
+  // color
+  background: $color;
   color: white;
   @if brightness($color) > 65% {
     color: black;
   }
 
-  &:not(.text) {
-    background: $color;
-    &:hover {
-      background: darken($color, 10);
-    }
-
-    &:disabled {
-      background: #ddd;
-      color: #999;
-    }
+  &:hover {
+    background: darken($color, 10);
   }
 
-  &.text {
-    color: $color;
+  &.text:not(:hover) {
     background: $light-gray;
-    &:hover:not(:disabled) {
-      color: white;
-      @if brightness($color) > 65% {
-        color: black;
-      }
-      background: $color;
-    }
-    &:disabled {
-      // background: rgba(0, 0, 0, 0);
-      color: #ccc;
-    }
+    color: $color;
+  }
+
+  &.invalid,
+  &:disabled.invalid {
+    color: red;
+    pointer-events: none;
   }
 
   &:disabled {
+    background: #ddd;
+    color: #999;
     cursor: default;
   }
 

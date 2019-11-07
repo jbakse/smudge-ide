@@ -2,7 +2,7 @@
   <div class="view sketch">
     <template v-if="sketch">
       <div class="header">
-        <ValidationObserver ref="observer" v-slot="{ pristine, invalid }">
+        <ValidationObserver ref="observer" v-slot="{ pristine, invalid, dirty }">
           <h1>
             <VeeInput
               :disabled="!$can('write', sketch)"
@@ -12,13 +12,14 @@
               v-model="sketch.title"
             />
           </h1>
-          <div class="inline-block" v-can="['write', sketch]">
-            <button
-              :class="{text: pristine || invalid}"
-              :disabled="pristine || invalid"
-              @click="saveSketch"
-            >Save Sketch</button>
-          </div>
+
+          <button
+            v-if="$can('write', sketch) && dirty"
+            :class="{invalid}"
+            :disabled="pristine || invalid"
+            @click="saveSketch"
+          >Save Sketch</button>
+
           <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button>
         </ValidationObserver>
       </div>
