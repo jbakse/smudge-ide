@@ -1,5 +1,5 @@
 <template>
-  <iframe id="sketch-frame">{{source}}</iframe>
+  <div ref="wrapper" class="jsview-wrapper"></div>
 </template>
 
 <script lang="ts">
@@ -13,7 +13,8 @@ export default Vue.extend({
     source: {
       immediate: true,
       handler(uid) {
-        runJS(this.source);
+        if (!this.$refs.wrapper) return;
+        runJSDebounced(this.source, this.$refs.wrapper as HTMLElement);
       },
     },
   },
@@ -30,7 +31,9 @@ function readDirectives(text: string) {
   return { requires };
 }
 
-const runJS = _.debounce((source: string) => {
+const runJSDebounced = _.debounce(runJS, 100);
+
+function runJS(source: string, target: HTMLElement) {
   // directives
   const { requires } = readDirectives(source);
 
@@ -50,15 +53,32 @@ const runJS = _.debounce((source: string) => {
 </body>
 </html>`;
 
-  const sketchFrame = document.getElementById('sketch-frame');
+  const sketchFrame = document.createElement('iframe');
+  sketchFrame.classList.add('jsview-iframe');
+  // document.getElementById('sketch-frame');
+
+  console.log('log');
+
+  // @todo try building the iframe in js and attaching
+  // https://stackoverflow.com/questions/13214419/alternatives-to-iframe-srcdoc
 
   (sketchFrame as HTMLIFrameElement).srcdoc = sketchSrcDoc;
-}, 100);
+  target.innerHTML = '';
+  target.appendChild(sketchFrame);
+}
 </script>
 
-<style scoped lang="scss">
-iframe {
-  border: 0;
+<style lang="scss">
+.jsview-wrapper {
+  border: 1px dotted red;
+  display: flex;
 }
+.jsview-iframe {
+  border: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+// <iframe id="sketch-frame"></iframe>
 </style>
 

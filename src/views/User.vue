@@ -50,14 +50,14 @@
         </div>
         <div class="column">
           <h2>Sketches</h2>
-
-          <router-link
-            v-for="sketch in sketches"
-            v-bind:key="sketch.id"
-            class="sketch"
-            :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
-          >{{ sketch.title }}</router-link>
-
+          <transition-group name="sketches" tag="div">
+            <router-link
+              v-for="sketch in sketches"
+              v-bind:key="sketch.id"
+              class="sketch sketches-item"
+              :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
+            >{{ sketch.title }}</router-link>
+          </transition-group>
           <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
         </div>
       </div>
@@ -149,10 +149,10 @@ export default Vue.extend({
     createSketch() {
       createSketch()
         .then((docRef) => {
-          this.$router.push({
-            name: 'sketch',
-            params: { sketchId: docRef.id },
-          });
+          // this.$router.push({
+          //   name: 'sketch',
+          //   params: { sketchId: docRef.id },
+          // });
         })
         .catch((err) => {
           console.log('error creating sketch outer', err);
@@ -183,6 +183,17 @@ export default Vue.extend({
   width: 25%;
   font-weight: normal;
   font-size: 18px;
+}
+
+.sketches-item {
+  transition: all 1s;
+
+  margin-right: 10px;
+}
+.sketches-enter,
+.sketches-leave-to {
+  opacity: 0;
+  //transform: scale(0.9);
 }
 </style>
 

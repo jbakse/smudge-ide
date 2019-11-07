@@ -1,10 +1,19 @@
 # Bugs
 
+- auth needs to subscribe to profile changes in case display name etc changes
+
 # Cleanup
 
 # Broad Features
 
+- Add timestamps to sketches
+
 - Fronted Validation
+
+  - x add veevalidate
+  - refactor inherit input into component
+  - validate sketches view
+
 - Backend Validation
 - remove keen?
 
