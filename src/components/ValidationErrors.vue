@@ -21,13 +21,11 @@ export default Vue.extend({
   color: red;
   font-weight: normal;
 
-  padding: 0;
   background: $light-gray;
   display: inline-block;
   padding: 10px;
-  // position: absolute;
+  margin: 0;
 
-  // max-width: 30em;
   li {
     list-style: none;
   }

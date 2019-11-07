@@ -28,6 +28,9 @@ Vue.component('ValidationObserver', ValidationObserver);
 import ValidationErrors from '@/components/ValidationErrors.vue';
 Vue.component('ValidationErrors', ValidationErrors);
 
+import VeeInput from '@/components/VeeInput.vue';
+Vue.component('VeeInput', VeeInput);
+
 new Vue({
   router,
   render: (h) => h(App),

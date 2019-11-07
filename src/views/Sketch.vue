@@ -2,18 +2,25 @@
   <div class="view sketch">
     <template v-if="sketch">
       <div class="header">
-        <div>
+        <ValidationObserver ref="observer" v-slot="{ pristine, invalid }">
           <h1>
-            <input v-can.disable="['write', sketch]" class="inherit title" v-model="sketch.title" />
+            <VeeInput
+              :disabled="!$can('write', sketch)"
+              label="title"
+              vid="title"
+              rules="max:60|min:4"
+              v-model="sketch.title"
+            />
           </h1>
-          <button
-            v-can="['write', sketch]"
-            @click="saveSketch"
-            :disabled="dirty == false"
-            :class="{text: dirty == false}"
-          >Save Sketch</button>
+          <div class="inline-block" v-can="['write', sketch]">
+            <button
+              :class="{text: pristine || invalid}"
+              :disabled="pristine || invalid"
+              @click="saveSketch"
+            >Save Sketch</button>
+          </div>
           <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button>
-        </div>
+        </ValidationObserver>
       </div>
       <div class="editor row">
         <div class="column input">
@@ -49,7 +56,6 @@ import 'firebase/firestore';
 export default Vue.extend({
   name: 'Sketch',
   props: ['sketchId'],
-
   components: {
     CodeEditor,
     JSView,
@@ -58,7 +64,6 @@ export default Vue.extend({
   data: () => ({
     sketch: {} as Sketch,
     type: 'sketch',
-    dirty: false,
   }),
 
   computed: {},
@@ -69,21 +74,15 @@ export default Vue.extend({
         this.$bind('sketch', sketches.doc(this.sketchId));
       },
     },
-    sketch: {
-      deep: true,
-      handler(newSketch, oldSketch) {
-        if (oldSketch.id === newSketch.id) {
-          this.dirty = true;
-        }
-      },
-    },
   },
 
   methods: {
     saveSketch() {
       saveSketch(this.sketch).then(() => {
         console.log('saved');
-        this.dirty = false;
+        requestAnimationFrame(() => {
+          (this.$refs.observer as any).reset();
+        });
       });
     },
 

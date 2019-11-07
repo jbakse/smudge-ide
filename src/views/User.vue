@@ -3,11 +3,27 @@
     <template v-if="userProfile">
       <div class="header">
         <div>
-          <ValidationObserver
-            ref="observer"
-            v-slot="{ pristine, dirty, valid, invalid, pending, touched }"
-          >
+          <ValidationObserver ref="observer" v-slot="{ pristine, invalid }">
             <h1 class="display-name">
+              <VeeInput
+                :disabled="!$can('write', userProfile)"
+                label="display name"
+                vid="displayName"
+                rules="max:30|min:4"
+                v-model="userProfile.displayName"
+              />
+            </h1>
+
+            <h2 class="username">
+              <VeeInput
+                :disabled="!$can('write', userProfile)"
+                label="username"
+                vid="username"
+                rules="max:20|min:4"
+                v-model="userProfile.username"
+              />
+            </h2>
+            <!-- <h1 class="display-name">
               <ValidationProvider
                 name="display name"
                 rules="max:30|min:4"
@@ -21,9 +37,9 @@
                 />
                 <ValidationErrors :errors="errors" />
               </ValidationProvider>
-            </h1>
+            </h1>-->
 
-            <h2 class="username">
+            <!-- <h2 class="username">
               <ValidationProvider name="username" rules="max:20|min:4" v-slot="{ errors, classes }">
                 <input
                   v-can.disable="['write', userProfile]"
@@ -32,14 +48,14 @@
                 />
                 <ValidationErrors :errors="errors" />
               </ValidationProvider>
-            </h2>
-            <template v-can="['write', userProfile]">
+            </h2>-->
+            <div v-can="['write', userProfile]">
               <button
-                :class="{text: dirty == false}"
-                :disabled="dirty == false"
+                :class="{text: pristine || invalid}"
+                :disabled="pristine || invalid"
                 @click="saveProfile"
               >Save Profile</button>
-            </template>
+            </div>
           </ValidationObserver>
         </div>
       </div>
@@ -50,17 +66,17 @@
         </div>
         <div class="column">
           <h2>Sketches</h2>
-          <transition-group name="sketches" tag="div">
-            <router-link
-              v-for="sketch in sketches"
-              v-bind:key="sketch.id"
-              class="sketch sketches-item"
-              :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
-            >
-              <span class="title">{{ sketch.title }}</span>
-              <span class="updated">{{ formatTime(sketch.updated) }}</span>
-            </router-link>
-          </transition-group>
+
+          <router-link
+            v-for="sketch in sketches"
+            v-bind:key="sketch.id"
+            class="sketch sketches-item"
+            :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
+          >
+            <span class="title">{{ sketch.title }}</span>
+            <span class="updated">{{ formatTime(sketch.updated) }}</span>
+          </router-link>
+
           <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
         </div>
       </div>
@@ -69,8 +85,6 @@
       <h1>No user named {{username}}</h1>
     </template>
   </div>
-
-  <!-- <div v-can="['be', userProfile]" class="alert">This is you!</div> -->
 </template>
 
 
@@ -88,21 +102,11 @@ export default Vue.extend({
 
   data: () => ({
     auth,
-
     userProfile: {} as UserProfile,
     sketches: {} as Sketch,
   }),
 
   watch: {
-    // userProfile: {
-    //   deep: true,
-    //   handler(newProfile, oldProfile) {
-    //     if (oldProfile.id === newProfile.id) {
-    //       this.dirty = true;
-    //     }
-    //   },
-    // },
-
     username: {
       immediate: true,
       handler() {
@@ -133,10 +137,6 @@ export default Vue.extend({
     },
   },
 
-  // @todo think about where to get the id passed to saveProfile and saveSketch
-  // should i get it from the router? should i get it from the displayed document (probably)?
-  // are the acl rules based on this, check that all code uses the same way
-
   methods: {
     formatTime(time: firestore.Timestamp) {
       return time && new Date(time.seconds * 1000).toLocaleString();
@@ -157,12 +157,13 @@ export default Vue.extend({
       });
     },
     createSketch() {
+      this.$unbind('sketches', false);
       createSketch()
         .then((docRef) => {
-          // this.$router.push({
-          //   name: 'sketch',
-          //   params: { sketchId: docRef.id },
-          // });
+          this.$router.push({
+            name: 'sketch',
+            params: { sketchId: docRef.id },
+          });
         })
         .catch((err) => {
           console.log('error creating sketch outer', err);
@@ -196,19 +197,12 @@ export default Vue.extend({
 }
 
 .sketches-item {
-  transition: all 1s;
   margin-right: 10px;
   display: flex;
   justify-content: space-between;
   .updated {
     color: #aaa;
   }
-}
-
-.sketches-enter,
-.sketches-leave-to {
-  opacity: 0;
-  //transform: scale(0.9);
 }
 </style>
 
