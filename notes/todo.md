@@ -8,6 +8,38 @@
 
 # Broad Features
 
+- Add active status to home page links (router active)
+- Add hover state to top menu
+- Highlight auth user (and maybe their sketches) in lists
+- add snackbar notice when save completes
+
+- 0 characters is allowed!? on between? fix all fields
+- it is not clear that you can edit the dotted underlined fields
+
+- add keyboard shortcuts?!
+
+- live previewing javascript dangerous for non terminating loops
+
+- sketch not loading on initial sketch page load?
+
+* Users
+
+  - Scaling: Add pagination/search/filter (maybe not needed), sort by recent activity (log in, add a sketch)
+
+* Profile
+
+  - Sketches
+
+    - sketch listing in relative time (full time on hover)
+    - Scaling: Add filtering. Pagination (needed)
+
+  - Profile
+
+    - Change Picture (to other picture online url, no uploading)
+    - Add Description Field
+
+- is there a way to make the page load more "atomicly" so it doesn't flash in in steps?
+
 - x Add timestamps to sketches
 
 - Fronted Validation
@@ -21,8 +53,10 @@
 - Backend Validation
 - remove keen?
 
+- Login Popup? or show waiting/spinner?
+  - Bigger sign out: show message or redirect somewhere
 - Profiles
-  - Better User Signin/Out Name Pic widget
+  - Better User Signin/Out widget (Name Pic Drop Down, etc)
   - User Profile RTF desc
 
 # Specific Features

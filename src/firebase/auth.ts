@@ -51,6 +51,7 @@ class Auth {
   public signIn() {
     const provider = new firebase.auth.GithubAuthProvider();
     firebase.auth().signInWithRedirect(provider);
+    // firebase.auth().signInWithPopup(provider);
   }
 
   public signOut() {

@@ -1,6 +1,6 @@
 <template>
   <div class="view user">
-    <template v-if="userProfile">
+    <template v-if="userProfile.id">
       <div class="header">
         <div>
           <ValidationObserver ref="observer" v-slot="{ dirty, invalid }">
@@ -55,9 +55,9 @@
         </div>
       </div>
     </template>
-    <template v-else>
+    <!-- <template v-else>
       <h1>No user named {{username}}</h1>
-    </template>
+    </template>-->
   </div>
 </template>
 

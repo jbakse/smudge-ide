@@ -1,12 +1,14 @@
 <template>
   <div class="view users">
-    <h1>Users</h1>
-    <router-link
-      class="user"
-      v-for="user in users"
-      v-bind:key="user.username"
-      :to="{ name: 'user', params: {username: user.username}}"
-    >{{user.username}}</router-link>
+    <template v-if="users.length">
+      <h1>Users</h1>
+      <router-link
+        class="user"
+        v-for="user in users"
+        v-bind:key="user.username"
+        :to="{ name: 'user', params: {username: user.username}}"
+      >{{user.username}}</router-link>
+    </template>
   </div>
 </template>
 
@@ -21,7 +23,7 @@ export default Vue.extend({
     users: users.orderBy('username').limit(30),
   },
   data: () => ({
-    users: {},
+    users: [],
   }),
 });
 </script>
