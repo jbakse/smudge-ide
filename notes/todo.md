@@ -11,15 +11,18 @@
 - x 0 characters is allowed!? on between? fix all fields
 - x sketch not loading on initial sketch page load?
 
-- Highlight auth user (and maybe their sketches) in lists
+- add snackbar notice when save completes
 
 - Add active status to home page links (router active)
 - Add hover state to top menu
-- add snackbar notice when save completes
+
+- Highlight auth user (and maybe their sketches) in lists
 
 - it is not clear that you can edit the dotted underlined fields
 
 - add keyboard shortcuts?!
+
+- relative dates in sketch listing
 
 - live previewing javascript dangerous for non terminating loops
 
