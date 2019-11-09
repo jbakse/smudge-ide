@@ -9,6 +9,7 @@
 # Broad Features
 
 - x 0 characters is allowed!? on between? fix all fields
+- x sketch not loading on initial sketch page load?
 
 - Highlight auth user (and maybe their sketches) in lists
 
@@ -21,8 +22,6 @@
 - add keyboard shortcuts?!
 
 - live previewing javascript dangerous for non terminating loops
-
-- sketch not loading on initial sketch page load?
 
 * Users
 

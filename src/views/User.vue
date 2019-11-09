@@ -9,7 +9,7 @@
                 :disabled="!$can('write', userProfile)"
                 label="display name"
                 vid="displayName"
-                rules="max:30|min:4"
+                rules="required|max:30|min:4"
                 v-model="userProfile.displayName"
               />
             </h1>
@@ -19,7 +19,7 @@
                 :disabled="!$can('write', userProfile)"
                 label="username"
                 vid="username"
-                rules="max:20|min:4"
+                rules="required|max:20|min:4"
                 v-model="userProfile.username"
               />
             </h2>

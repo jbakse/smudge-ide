@@ -8,7 +8,7 @@
               :disabled="!$can('write', sketch)"
               label="title"
               vid="title"
-              rules="max:60|min:4"
+              rules="required|max:60|min:4"
               v-model="sketch.title"
             />
           </h1>

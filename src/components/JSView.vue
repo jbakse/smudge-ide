@@ -11,12 +11,14 @@ export default Vue.extend({
   props: { source: { type: String, default: '' } },
   watch: {
     source: {
-      immediate: true,
       handler(uid) {
         if (!this.$refs.wrapper) return;
         runJSDebounced(this.source, this.$refs.wrapper as HTMLElement);
       },
     },
+  },
+  mounted() {
+    runJSDebounced(this.source, this.$refs.wrapper as HTMLElement);
   },
 });
 
