@@ -3,6 +3,13 @@
     <template v-if="userProfile.id">
       <div class="header">
         <div>
+          <ui-snackbar-container
+            class="snackbar-container"
+            ref="snackbarContainer"
+            :position="position"
+            :transition="transition"
+            :queue-snackbars="queueSnackbars"
+          ></ui-snackbar-container>
           <ValidationObserver ref="observer" v-slot="{ dirty, invalid }">
             <h1 class="display-name">
               <VeeInput
@@ -127,7 +134,10 @@ export default Vue.extend({
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
         });
-        // this.dirty = false;
+        (this.$refs.snackbarContainer as any).createSnackbar({
+          message: 'Profile Saved!',
+          duration: 1000,
+        });
       });
     },
     createSketch() {

@@ -11,7 +11,7 @@
 - x 0 characters is allowed!? on between? fix all fields
 - x sketch not loading on initial sketch page load?
 
-- add snackbar notice when save completes
+- x add snackbar notice when save completes
 
 - Add active status to home page links (router active)
 - Add hover state to top menu

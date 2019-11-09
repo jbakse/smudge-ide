@@ -1,6 +1,13 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch.id">
+      <ui-snackbar-container
+        class="snackbar-container"
+        ref="snackbarContainer"
+        :position="position"
+        :transition="transition"
+        :queue-snackbars="queueSnackbars"
+      ></ui-snackbar-container>
       <ValidationObserver ref="observer" v-slot="{ invalid, dirty }" class="observer">
         <div class="header">
           <h1>
@@ -101,11 +108,20 @@ export default Vue.extend({
   },
 
   methods: {
-    saveSketch() {
+    async saveSketch() {
+      const isValid = await (this.$refs.observer as any).validate();
+      if (!isValid) {
+        console.error('form not valid!');
+        return;
+      }
       saveSketch(this.sketch).then(() => {
         console.log('saved');
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
+        });
+        (this.$refs.snackbarContainer as any).createSnackbar({
+          message: 'Sketch Saved!',
+          duration: 1000,
         });
       });
     },
@@ -166,7 +182,5 @@ input.title {
 }
 </style>
 
-<style lang="scss">
-</style>
 
 
