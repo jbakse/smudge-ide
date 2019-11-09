@@ -8,12 +8,14 @@
 
 # Broad Features
 
+- x 0 characters is allowed!? on between? fix all fields
+
+- Highlight auth user (and maybe their sketches) in lists
+
 - Add active status to home page links (router active)
 - Add hover state to top menu
-- Highlight auth user (and maybe their sketches) in lists
 - add snackbar notice when save completes
 
-- 0 characters is allowed!? on between? fix all fields
 - it is not clear that you can edit the dotted underlined fields
 
 - add keyboard shortcuts?!
