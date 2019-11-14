@@ -13,7 +13,7 @@
 
 - x add snackbar notice when save completes
 
-- Add active status to home page links (router active)
+- x Add active status to home page links (router active)
 - Add hover state to top menu
 
 - Highlight auth user (and maybe their sketches) in lists

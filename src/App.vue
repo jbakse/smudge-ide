@@ -100,5 +100,9 @@ body {
   .menu a {
     padding: 5px 30px;
   }
+
+  a.router-link-exact-active {
+    color: $accent-color;
+  }
 }
 </style>
