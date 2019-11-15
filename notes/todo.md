@@ -11,40 +11,52 @@
 - x 0 characters is allowed!? on between? fix all fields
 - x sketch not loading on initial sketch page load?
 
-- x add snackbar notice when save completes
+- add snackbar notice when save completes
+
+  - x make it work
+  - make it clean
 
 - x Add active status to home page links (router active)
-- Add hover state to top menu
+- x Add hover state to top menu
 
-- Highlight auth user (and maybe their sketches) in lists
+## UI UX
 
 - it is not clear that you can edit the dotted underlined fields
 
-- add keyboard shortcuts?!
+- saving workflow
+
+  - support fork
+  - disable (or allow toggle) live preview
+  - live previewing javascript dangerous for non terminating loops
+  - add keyboard shortcuts?!
 
 - relative dates in sketch listing
 
-- live previewing javascript dangerous for non terminating loops
+- Highlight auth user (and maybe their sketches) in lists
 
-* Users
+## Users
 
-  - Scaling: Add pagination/search/filter (maybe not needed), sort by recent activity (log in, add a sketch)
+## Profile
 
-* Profile
+- Sketches
 
-  - Sketches
+  - x sketch listing in relative time (full time on hover)
+  - Add filtering. Pagination (needed)
 
-    - sketch listing in relative time (full time on hover)
-    - Scaling: Add filtering. Pagination (needed)
+- Profile
 
-  - Profile
+  - Change Picture (to other picture online url, no uploading)
+  - Add Description Field
 
-    - Change Picture (to other picture online url, no uploading)
-    - Add Description Field
-
-- is there a way to make the page load more "atomicly" so it doesn't flash in in steps?
+- x is there a way to make the page load more "atomicly" so it doesn't flash in in steps?
 
 - x Add timestamps to sketches
+
+## Scaling Pagination Filiter
+
+- Add pagination/search/filter (maybe not needed), sort by recent activity (log in, add a sketch)
+
+  - Firebase doesn't support text search...
 
 - Fronted Validation
 

@@ -150,6 +150,31 @@ a.simple {
   }
 }
 
+input.search {
+  display: block;
+  margin-bottom: 1em;
+  border: 1px solid $accent-color;
+  border-radius: 200px;
+  padding: 0 10px;
+  background: none;
+  font-family: inherit;
+  font-size: 18px;
+}
+
+.hover-show {
+  display: none;
+  :hover > & {
+    display: block;
+  }
+}
+
+.hover-hide {
+  display: block;
+  :hover > & {
+    display: none;
+  }
+}
+
 // vue / vue-router
 
 // keen

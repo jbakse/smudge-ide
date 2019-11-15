@@ -6,9 +6,6 @@
           <ui-snackbar-container
             class="snackbar-container"
             ref="snackbarContainer"
-            :position="position"
-            :transition="transition"
-            :queue-snackbars="queueSnackbars"
           ></ui-snackbar-container>
           <ValidationObserver ref="observer" v-slot="{ dirty, invalid }">
             <h1 class="display-name">
@@ -33,10 +30,12 @@
 
             <button
               v-if="$can('write', userProfile)"
-              :class="{invalid}"
+              :class="{ invalid }"
               :disabled="!dirty || invalid"
               @click="saveProfile"
-            >Save Profile</button>
+            >
+              Save Profile
+            </button>
           </ValidationObserver>
         </div>
       </div>
@@ -47,18 +46,25 @@
         </div>
         <div class="column">
           <h2>Sketches</h2>
-
+          <input type="search" v-model="sketchQuery" class="search" />
           <router-link
-            v-for="sketch in sketches"
+            v-for="sketch in filteredSketches"
             v-bind:key="sketch.id"
             class="sketch sketches-item"
-            :to="{ name: 'sketch', params: {sketchId: sketch.id}}"
+            :to="{ name: 'sketch', params: { sketchId: sketch.id } }"
           >
             <span class="title">{{ sketch.title }}</span>
-            <span class="updated">{{ formatTime(sketch.updated) }}</span>
+            <span class="updated hover-show">{{
+              formatTime(sketch.updated)
+            }}</span>
+            <span class="updated hover-hide">{{
+              relativeTime(sketch.updated)
+            }}</span>
           </router-link>
 
-          <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
+          <button v-can="['write', userProfile]" v-on:click="createSketch">
+            Create Sketch
+          </button>
         </div>
       </div>
     </template>
@@ -68,7 +74,6 @@
   </div>
 </template>
 
-
 <script lang="ts">
 import Vue from 'vue';
 import { auth } from '@/firebase/auth';
@@ -76,6 +81,8 @@ import { firebase } from '@/firebase/firebase';
 import { users, UserProfile, saveProfile } from '@/firebase/users';
 import { sketches, Sketch, createSketch } from '@/firebase/sketches';
 import { firestore } from 'firebase';
+import _ from 'lodash';
+import moment from 'moment';
 
 export default Vue.extend({
   name: 'User',
@@ -83,11 +90,15 @@ export default Vue.extend({
 
   data: () => ({
     auth,
+    sketchQuery: '',
     userProfile: {} as UserProfile,
     sketches: {} as Sketch,
   }),
 
   watch: {
+    sketchQuery() {
+      console.log('hi sketchquery');
+    },
     username: {
       immediate: true,
       handler() {
@@ -105,7 +116,6 @@ export default Vue.extend({
       },
     },
     'userProfile.id': {
-      immediate: true,
       handler() {
         if (!(this.userProfile && this.userProfile.id)) return;
         this.$bind(
@@ -117,12 +127,21 @@ export default Vue.extend({
       },
     },
   },
-
+  computed: {
+    filteredSketches() {
+      return _.filter(this.sketches, (s: any) =>
+        s.title.toLowerCase().includes(this.sketchQuery.toLowerCase())
+      );
+    },
+  },
   methods: {
     formatTime(time: firestore.Timestamp) {
-      return time && new Date(time.seconds * 1000).toLocaleString();
+      return time && moment(time.seconds * 1000).format('YYYY-MM-DD h:mm:ss a');
     },
 
+    relativeTime(time: firestore.Timestamp) {
+      return time && moment(time.seconds * 1000).fromNow();
+    },
     async saveProfile() {
       const isValid = await (this.$refs.observer as any).validate();
       if (!isValid) {
@@ -157,7 +176,6 @@ export default Vue.extend({
 });
 </script>
 
-
 <style scoped lang="scss">
 @import '@/scss/_shared.scss';
 
@@ -189,5 +207,3 @@ export default Vue.extend({
   }
 }
 </style>
-
-
