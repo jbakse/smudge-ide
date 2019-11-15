@@ -1,4 +1,5 @@
 import { firebase } from './firebase';
+
 const db = firebase.firestore();
 export const users = db.collection('users');
 

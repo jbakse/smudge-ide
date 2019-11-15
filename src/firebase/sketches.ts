@@ -4,8 +4,6 @@ import * as auth from '@/firebase/auth';
 const db = firebase.firestore();
 export const sketches = db.collection('sketches');
 
-// @todo add timestamps!
-
 export type Sketch = {
   id: string; // document name added as non-enumerable prop by vuefire
   title: string;
@@ -27,8 +25,9 @@ function draw() {
 }`;
 
 export function createSketch() {
-  if (!auth.user.loggedIn)
+  if (!auth.user.loggedIn) {
     return Promise.reject(new Error('User not logged in.'));
+  }
 
   return sketches
     .add({
