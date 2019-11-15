@@ -1,5 +1,5 @@
 import { firebase } from '@/firebase/firebase';
-import { auth } from '@/firebase/auth';
+import * as auth from '@/firebase/auth';
 
 const db = firebase.firestore();
 export const sketches = db.collection('sketches');
@@ -27,12 +27,13 @@ function draw() {
 }`;
 
 export function createSketch() {
-  if (!auth.loggedIn) return Promise.reject(new Error('User not logged in.'));
+  if (!auth.user.loggedIn)
+    return Promise.reject(new Error('User not logged in.'));
 
   return sketches
     .add({
-      ownerId: auth.uid,
-      ownerUsername: auth.username,
+      ownerId: auth.user.uid,
+      ownerUsername: auth.user.username,
       title: 'untitled',
       source: sketchTemplate,
       created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -46,12 +47,10 @@ export function createSketch() {
 
 export function saveSketch(sketch: Sketch) {
   if (sketch == null) return Promise.reject(new Error('Sketch is "null".'));
-  return sketches
-    .doc(sketch.id)
-    .update({
-      ...sketch,
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  return sketches.doc(sketch.id).update({
+    ...sketch,
+    updated: firebase.firestore.FieldValue.serverTimestamp(),
+  });
   // ... spread operator used to exclude id (it is non-enumerable)
 }
 

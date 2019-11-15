@@ -67,12 +67,11 @@
   - x validate sketches view
 
 - Backend Validation
-- remove keen?
 
-- Login Popup? or show waiting/spinner?
+* Login Popup? or show waiting/spinner?
   - Bigger sign out: show message or redirect somewhere
-- Profiles
-  - Better User Signin/Out widget (Name Pic Drop Down, etc)
+* Profiles
+  - x Better User Signin/Out widget (Name Pic Drop Down, etc)
   - User Profile RTF desc
 
 # Specific Features

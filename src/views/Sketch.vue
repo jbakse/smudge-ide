@@ -1,14 +1,11 @@
 <template>
   <div class="view sketch">
     <template v-if="sketch.id">
-      <ui-snackbar-container
-        class="snackbar-container"
-        ref="snackbarContainer"
-        :position="position"
-        :transition="transition"
-        :queue-snackbars="queueSnackbars"
-      ></ui-snackbar-container>
-      <ValidationObserver ref="observer" v-slot="{ invalid, dirty }" class="observer">
+      <ValidationObserver
+        ref="observer"
+        v-slot="{ invalid, dirty }"
+        class="observer"
+      >
         <div class="header">
           <h1>
             <VeeInput
@@ -24,22 +21,31 @@
             by
             <router-link
               class="simple"
-              :to="{ name: 'user', params: {username: sketch.ownerUsername}}"
-            >{{sketch.ownerUsername}}</router-link>
+              :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
+              >{{ sketch.ownerUsername }}</router-link
+            >
           </div>
 
           <button
             v-if="$can('write', sketch)"
-            :class="{invalid}"
+            :class="{ invalid }"
             :disabled="!dirty || invalid"
             @click="saveSketch"
-          >Save Sketch</button>
+          >
+            Save Sketch
+          </button>
 
-          <button v-can="['write', sketch]" @click="deleteSketch" class="text">Delete Sketch</button>
+          <button v-can="['write', sketch]" @click="deleteSketch" class="text">
+            Delete Sketch
+          </button>
         </div>
         <div class="editor row">
           <div class="column input">
-            <ValidationProvider name="source" rules="max:33088" v-slot="{ errors, classes }">
+            <ValidationProvider
+              name="source"
+              rules="max:33088"
+              v-slot="{ errors, classes }"
+            >
               <ValidationErrors :errors="errors" />
               <div class="wrap">
                 <CodeEditor v-model="sketch.source" />
@@ -50,27 +56,16 @@
         </div>
       </ValidationObserver>
     </template>
-    <!-- <template v-else>
-      <h1>No sketch {{sketchId}}</h1>
-    </template>-->
   </div>
 </template>
 
-
 <script lang="ts">
 import Vue from 'vue';
-import { auth } from '@/firebase/auth';
+import * as auth from '@/firebase/auth';
+import * as sketches from '@/firebase/sketches';
+import * as snackbar from '@/snackbar';
 import CodeEditor from '@/components/CodeEditor.vue';
 import JSView from '@/components/JSView.vue';
-
-// @ todo hide buttons/editability if not owned
-
-import {
-  sketches,
-  saveSketch,
-  deleteSketch,
-  Sketch,
-} from '../firebase/sketches';
 
 import 'firebase/firestore';
 
@@ -83,7 +78,7 @@ export default Vue.extend({
   },
 
   data: () => ({
-    sketch: {} as Sketch,
+    sketch: {} as sketches.Sketch,
     type: 'sketch',
   }),
 
@@ -100,7 +95,7 @@ export default Vue.extend({
     sketchId: {
       immediate: true,
       handler(sketchId) {
-        this.$bind('sketch', sketches.doc(this.sketchId), {
+        this.$bind('sketch', sketches.sketches.doc(this.sketchId), {
           wait: true,
         }).then();
       },
@@ -114,23 +109,21 @@ export default Vue.extend({
         console.error('form not valid!');
         return;
       }
-      saveSketch(this.sketch).then(() => {
+      sketches.saveSketch(this.sketch).then(() => {
         console.log('saved');
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
         });
-        (this.$refs.snackbarContainer as any).createSnackbar({
-          message: 'Sketch Saved!',
-          duration: 1000,
-        });
+
+        snackbar.showSnackbar('Sketch Saved!');
       });
     },
 
     deleteSketch() {
-      deleteSketch(this.sketchId).then(() => {
+      sketches.deleteSketch(this.sketchId).then(() => {
         this.$router.replace({
           name: 'user',
-          params: { username: auth.username },
+          params: { username: auth.user.username },
         });
       });
     },
@@ -139,7 +132,6 @@ export default Vue.extend({
 
 // @todo prettier/eslint file instead of airbnb?
 </script>
-
 
 <style scoped lang="scss">
 @import '@/scss/_shared.scss';
@@ -181,6 +173,3 @@ input.title {
   height: 100%;
 }
 </style>
-
-
-

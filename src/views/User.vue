@@ -3,10 +3,6 @@
     <template v-if="userProfile.id">
       <div class="header">
         <div>
-          <ui-snackbar-container
-            class="snackbar-container"
-            ref="snackbarContainer"
-          ></ui-snackbar-container>
           <ValidationObserver ref="observer" v-slot="{ dirty, invalid }">
             <h1 class="display-name">
               <VeeInput
@@ -81,20 +77,20 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { auth } from '@/firebase/auth';
+
 import { firebase } from '@/firebase/firebase';
 import { users, UserProfile, saveProfile } from '@/firebase/users';
 import { sketches, Sketch, createSketch } from '@/firebase/sketches';
 import { firestore } from 'firebase';
 import _ from 'lodash';
 import moment from 'moment';
+import { showSnackbar } from '@/snackbar';
 
 export default Vue.extend({
   name: 'User',
   props: ['username'],
 
   data: () => ({
-    auth,
     sketchQuery: '',
     userProfile: {} as UserProfile,
     sketches: {} as Sketch,
@@ -158,10 +154,7 @@ export default Vue.extend({
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
         });
-        (this.$refs.snackbarContainer as any).createSnackbar({
-          message: 'Profile Saved!',
-          duration: 1000,
-        });
+        showSnackbar('Profile Saved!');
       });
     },
     createSketch() {

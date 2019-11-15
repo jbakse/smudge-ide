@@ -88,6 +88,6 @@ class Auth {
   }
 }
 
-const auth = new Auth();
+const user = new Auth();
 
-export { auth };
+export { user };

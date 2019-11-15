@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Acl from 'vue-browser-acl';
-import { auth } from '@/firebase/auth';
+import * as auth from '@/firebase/auth';
 
-Vue.use(Acl, auth, (acl: any) => {
+Vue.use(Acl, auth.user, (acl: any) => {
   acl.rule('write', 'sketch', (u: any, sketch: any) => {
     return u.uid === sketch.ownerId;
   });

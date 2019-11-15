@@ -11,20 +11,26 @@
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'users' }">Users</router-link>
         <router-link
-          v-if="auth.username"
-          :to="{ name: 'user', params: {username: auth.username}}"
-        >{{auth.displayName}}</router-link>
+          v-if="auth.user.username"
+          :to="{ name: 'user', params: { username: auth.user.username } }"
+          >{{ auth.user.displayName }}</router-link
+        >
       </div>
       <SignIn class="signin" />
     </div>
     <router-view id="content" />
+    <ui-snackbar-container
+      class="snackbar-container"
+      ref="snackbarContainer"
+    ></ui-snackbar-container>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import SignIn from '@/components/SignIn.vue';
-import { auth } from '@/firebase/auth';
+import * as auth from '@/firebase/auth';
+import { setSnackbarContainer } from '@/snackbar';
 
 export default Vue.extend({
   name: 'app',
@@ -34,9 +40,12 @@ export default Vue.extend({
   data: () => ({
     auth,
   }),
+  methods: {},
+  mounted() {
+    setSnackbarContainer(this.$refs.snackbarContainer);
+  },
 });
 </script>
-
 
 <style lang="scss">
 // @import url('https://fonts.googleapis.com/css?family=Quicksand:500&display=swap');
