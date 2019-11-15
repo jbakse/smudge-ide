@@ -46,7 +46,12 @@
         </div>
         <div class="column">
           <h2>Sketches</h2>
-          <input type="search" v-model="sketchQuery" class="search" />
+          <input
+            type="search"
+            placeholder="search"
+            v-model="sketchQuery"
+            class="search"
+          />
           <router-link
             v-for="sketch in filteredSketches"
             v-bind:key="sketch.id"
