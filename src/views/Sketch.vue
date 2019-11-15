@@ -115,7 +115,7 @@ export default Vue.extend({
           (this.$refs.observer as any).reset();
         });
 
-        snackbar.showSnackbar('Sketch Saved!');
+        snackbar.show('Sketch Saved!');
       });
     },
 

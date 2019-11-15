@@ -1,36 +1,27 @@
 <template>
   <div id="app">
     <div id="nav">
-      <div class="left">
-        <span class="logo">
-          <router-link :to="{ name: 'home' }">SmudgeJS</router-link>
-        </span>
-      </div>
+      <router-link :to="{ name: 'home' }">SmudgeJS</router-link>
+
       <div class="menu">
         <router-link :to="{ name: 'home' }">Home</router-link>
-        <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'users' }">Users</router-link>
-        <router-link
-          v-if="auth.user.username"
-          :to="{ name: 'user', params: { username: auth.user.username } }"
-          >{{ auth.user.displayName }}</router-link
-        >
       </div>
-      <SignIn class="signin" />
+
+      <SignIn />
     </div>
+
     <router-view id="content" />
-    <ui-snackbar-container
-      class="snackbar-container"
-      ref="snackbarContainer"
-    ></ui-snackbar-container>
+
+    <ui-snackbar-container class="snackbar-container" ref="snackbarContainer" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import SignIn from '@/components/SignIn.vue';
 import * as auth from '@/firebase/auth';
-import { setSnackbarContainer } from '@/snackbar';
+import * as snackbar from '@/snackbar';
+import SignIn from '@/components/SignIn.vue';
 
 export default Vue.extend({
   name: 'app',
@@ -42,48 +33,24 @@ export default Vue.extend({
   }),
   methods: {},
   mounted() {
-    setSnackbarContainer(this.$refs.snackbarContainer);
+    snackbar.setContainer(this.$refs.snackbarContainer);
   },
 });
 </script>
 
+<style lang="scss" src="@/scss/_global.scss" />
+
 <style lang="scss">
-// @import url('https://fonts.googleapis.com/css?family=Quicksand:500&display=swap');
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 500;
-  font-display: auto;
-  src: url(https://fonts.gstatic.com/s/quicksand/v19/6xK-dSZaM9iE8KbpRA_LJ3z8mH9BOJvgkM0o58a-xDwxUD2GFw.woff)
-    format('woff');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: 'Quicksand';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/quicksand/v19/6xK-dSZaM9iE8KbpRA_LJ3z8mH9BOJvgkM0o58i-xDwxUD2GF9Zc.woff)
-    format('woff');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
-    U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
 @import '@/scss/_shared.scss';
 
 html {
   min-height: 100%;
   display: flex;
-  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   flex: 1;
-
   display: flex;
   flex-direction: column;
 }
@@ -95,7 +62,7 @@ body {
 }
 
 #nav {
-  padding: $vertical-margin 0;
+  padding: $vertical-margin * 0.5 0;
 
   border-bottom: 1px solid black;
   font-size: 20px;
@@ -106,12 +73,11 @@ body {
     color: black;
     text-decoration: none;
   }
-  .menu a {
-    padding: 5px 30px;
-  }
-
-  a.router-link-exact-active {
+  .menu a.router-link-exact-active {
     color: $accent-color;
+  }
+  .menu a {
+    margin: 0 30px;
   }
 }
 </style>

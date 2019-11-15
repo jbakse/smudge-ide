@@ -1,27 +1,29 @@
 import Vue from 'vue';
-import App from '@/App.vue';
-import router from '@/router';
+
+/////////////////////////////////////
+// vue-browser-acl
 import '@/acl';
 
-Vue.config.productionTip = false;
-
+/////////////////////////////////////
+// firestore
 import { firestorePlugin } from 'vuefire';
 Vue.use(firestorePlugin);
 
+/////////////////////////////////////
+// Keen
 import KeenUI from 'keen-ui';
 import 'keen-ui/dist/keen-ui.css';
 Vue.use(KeenUI);
 
+/////////////////////////////////////
+// vee-validate
 import {
   ValidationProvider,
   ValidationObserver,
-  extend,
   configure,
 } from 'vee-validate/dist/vee-validate.full';
 
 configure({ bails: false });
-
-// Register it globally
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 
@@ -31,6 +33,14 @@ Vue.component('ValidationErrors', ValidationErrors);
 import VeeInput from '@/components/VeeInput.vue';
 Vue.component('VeeInput', VeeInput);
 
+/////////////////////////////////////
+// config Vue
+Vue.config.productionTip = false;
+
+/////////////////////////////////////
+// start Vue
+import App from '@/App.vue';
+import router from '@/router';
 new Vue({
   router,
   render: (h) => h(App),

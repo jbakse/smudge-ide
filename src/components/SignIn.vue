@@ -1,9 +1,10 @@
 <template>
   <div id="sign-in">
-    <!-- <button v-if="auth.user.loggedIn" v-on:click="signOut">Sign Out</button> -->
-    <div v-if="auth.user.loggedIn" class="popover-trigger">
-      {{auth.user.username}}
-      <img class="user-photo" v-bind:src="auth.user.photoURL" />
+    <template v-if="user.ready">
+    <!-- <button v-if="user.loggedIn" v-on:click="signOut">Sign Out</button> -->
+    <div v-if="user.loggedIn" class="popover-trigger">
+      {{user.username}}
+      <img class="user-photo" v-bind:src="user.photoURL" />
       <ui-popover ref="dropdown" position="bottom-end">
         <ui-menu
           contain-focus
@@ -15,6 +16,7 @@
       </ui-popover>
     </div>
     <button v-else v-on:click="signIn">Sign In</button>
+    </template>
   </div>
 </template>
 
@@ -26,7 +28,7 @@ export default Vue.extend({
   name: 'SignIn',
   data: () => ({
     menuOptions,
-    auth,
+    user: auth.user,
   }),
   methods: {
     signIn: auth.user.signIn,
@@ -61,12 +63,16 @@ const menuOptions = [
 .user-photo {
   height: 30px;
   position: relative;
-  top: 7px;
+  top: 1px;
   border-radius: 15px;
   margin-left: 10px;
+  vertical-align: top;
 }
 .popover-trigger {
   cursor: pointer;
+}
+button {
+  margin: 0;
 }
 </style>
 

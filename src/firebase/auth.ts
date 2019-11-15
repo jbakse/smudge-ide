@@ -19,13 +19,14 @@ class Auth {
   public username: string = '';
   public displayName: string = '';
   public photoURL: string = '';
-
+  public ready: boolean = false;
   private user: firebase.User | null;
 
   constructor() {
     this.user = null;
 
     firebase.auth().onAuthStateChanged((newUser) => {
+      this.ready = true;
       this.user = newUser;
       if (newUser) {
         console.log('user signed in!');

@@ -5,19 +5,31 @@
 # Cleanup
 
 - create a list widget, share for sketches and for user list
+- remove About.vue
 
-# Broad Features
+# Big Issues
 
-- x 0 characters is allowed!? on between? fix all fields
-- x sketch not loading on initial sketch page load?
+## Scaling + Search + Pagination
 
-- add snackbar notice when save completes
+- Given that we can't do text search, do we want to support search at all for sketches, users?
 
-  - x make it work
-  - make it clean
+  - Should we remove sketch filter feature now since it might not scale?
 
-- x Add active status to home page links (router active)
-- x Add hover state to top menu
+- Should we put in pagination for sketches, users?
+
+- Do we need to change storage of sketches so that grabbing the names of every sketch for a user is more reasonable (currently we are getting the code also)
+
+## Validation
+
+- Add vee validate
+
+  - x add it
+  - review it, is it clean?
+
+- Backend Validation
+  - Move rules to source control instead of the web admin
+
+# By Topic
 
 ## UI UX
 
@@ -30,53 +42,16 @@
   - live previewing javascript dangerous for non terminating loops
   - add keyboard shortcuts?!
 
-- relative dates in sketch listing
+- ? Highlight auth user (and maybe their sketches) in lists
 
-- Highlight auth user (and maybe their sketches) in lists
-
-## Users
+## Sketches
 
 ## Profile
 
-- Sketches
-
-  - x sketch listing in relative time (full time on hover)
-  - Add filtering. Pagination (needed)
-
-- Profile
-
-  - Change Picture (to other picture online url, no uploading)
-  - Add Description Field
-
-- x is there a way to make the page load more "atomicly" so it doesn't flash in in steps?
-
-- x Add timestamps to sketches
+- Add Change Picture option (to other picture online url, no uploading)
+- Add Description Field
 
 ## Scaling Pagination Filiter
-
-- Add pagination/search/filter (maybe not needed), sort by recent activity (log in, add a sketch)
-
-  - Firebase doesn't support text search...
-
-- Fronted Validation
-
-  - x add veevalidate
-  - x refactor inherit input into component
-  - x refactor submit button
-    - x add invalid color state
-  - x validate sketches view
-
-- Backend Validation
-
-* Login Popup? or show waiting/spinner?
-  - Bigger sign out: show message or redirect somewhere
-* Profiles
-  - x Better User Signin/Out widget (Name Pic Drop Down, etc)
-  - User Profile RTF desc
-
-# Specific Features
-
-- Navigation Gaurds for Dirty
 
 # Not MVP Features
 
@@ -94,3 +69,4 @@
 
 - Usernames are not enforced to be unique on backend. #bigdeal
 - Changing username needs to update denormalized data
+- Backend validation isn't happening

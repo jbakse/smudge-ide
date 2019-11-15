@@ -1,6 +1,6 @@
 let container: any = null;
 
-function showSnackbar(message: string, duration = 1000) {
+function show(message: string, duration = 1000) {
   if (!container) return;
   (container as any).createSnackbar({
     message,
@@ -8,8 +8,8 @@ function showSnackbar(message: string, duration = 1000) {
   });
 }
 
-function setSnackbarContainer(c: any) {
+function setContainer(c: any) {
   container = c;
 }
 
-export { showSnackbar, setSnackbarContainer };
+export { show, setContainer };

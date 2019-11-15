@@ -84,7 +84,7 @@ import { sketches, Sketch, createSketch } from '@/firebase/sketches';
 import { firestore } from 'firebase';
 import _ from 'lodash';
 import moment from 'moment';
-import { showSnackbar } from '@/snackbar';
+import * as snackbar from '@/snackbar';
 
 export default Vue.extend({
   name: 'User',
@@ -154,7 +154,7 @@ export default Vue.extend({
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
         });
-        showSnackbar('Profile Saved!');
+        snackbar.show('Profile Saved!');
       });
     },
     createSketch() {
