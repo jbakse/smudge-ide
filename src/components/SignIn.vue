@@ -1,21 +1,21 @@
 <template>
   <div id="sign-in">
+    <!-- empty div (above) should stay in place while we wait for user.ready (below) to reduce layout shifting -->
     <template v-if="user.ready">
-    <!-- <button v-if="user.loggedIn" v-on:click="signOut">Sign Out</button> -->
-    <div v-if="user.loggedIn" class="popover-trigger">
-      {{user.username}}
-      <img class="user-photo" v-bind:src="user.photoURL" />
-      <ui-popover ref="dropdown" position="bottom-end">
-        <ui-menu
-          contain-focus
-          disableRipple
-          :options="menuOptions"
-          @close="$refs.dropdown.close()"
-          @select="select"
-        ></ui-menu>
-      </ui-popover>
-    </div>
-    <button v-else v-on:click="signIn">Sign In</button>
+      <div v-if="user.loggedIn" class="popover-trigger">
+        {{user.username}}
+        <img class="user-photo" v-bind:src="user.photoURL" />
+        <ui-popover ref="dropdown" position="bottom-end">
+          <ui-menu
+            contain-focus
+            disableRipple
+            :options="menuOptions"
+            @close="$refs.dropdown.close()"
+            @select="select"
+          ></ui-menu>
+        </ui-popover>
+      </div>
+      <button v-else v-on:click="signIn">Sign In</button>
     </template>
   </div>
 </template>
@@ -26,13 +26,17 @@ import * as auth from '@/firebase/auth';
 
 export default Vue.extend({
   name: 'SignIn',
+
   data: () => ({
     menuOptions,
     user: auth.user,
   }),
+
   methods: {
     signIn: auth.user.signIn,
+
     signOut: auth.user.signOut,
+
     select(option: any) {
       if (option.id === 'profile') {
         this.$router.push({

@@ -8,7 +8,9 @@ import _ from 'lodash';
 
 export default Vue.extend({
   name: 'JSView',
+
   props: { source: { type: String, default: '' } },
+
   watch: {
     source: {
       handler(uid) {
@@ -17,6 +19,7 @@ export default Vue.extend({
       },
     },
   },
+
   mounted() {
     runJSDebounced(this.source, this.$refs.wrapper as HTMLElement);
   },
@@ -77,5 +80,4 @@ function runJS(source: string, target: HTMLElement) {
   border: none;
   outline: none;
 }
-// <iframe id="sketch-frame"></iframe>
 </style>

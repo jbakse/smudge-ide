@@ -1,5 +1,9 @@
 <template>
-  <codemirror v-bind:value="value" v-on:input="emit" :options="cmOptions"></codemirror>
+  <codemirror
+    v-bind:value="value"
+    v-on:input="emit"
+    :options="cmOptions"
+  ></codemirror>
 </template>
 
 <script lang="ts">
@@ -14,10 +18,13 @@ import 'codemirror/theme/base16-light.css';
 
 export default Vue.extend({
   name: 'CodeEditor',
+
   props: { value: { type: String, default: '', required: true } },
+
   components: {
     codemirror,
   },
+
   data: () => ({
     cmOptions: {
       tabSize: 4,
@@ -28,15 +35,13 @@ export default Vue.extend({
       //   scrollbarStyle: 'overlay',
     },
   }),
+
   methods: {
     emit($event: any) {
-      console.log('emit');
       this.$emit('input', $event);
     },
   },
 });
-
-// $emit('input', $event);
 </script>
 
 <style lang="scss">
@@ -49,4 +54,3 @@ export default Vue.extend({
   height: 100%;
 }
 </style>
-

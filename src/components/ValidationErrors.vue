@@ -28,9 +28,9 @@ export default Vue.extend({
 
   li {
     list-style: none;
-  }
-  li:before {
-    content: '➤ ';
+    &:before {
+      content: '➤ ';
+    }
   }
 }
 </style>
