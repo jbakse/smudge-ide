@@ -66,7 +66,9 @@ function runJS(source: string, target: HTMLElement) {
 </script>
 
 <style lang="scss">
+@import '@/scss/_shared.scss';
 .jsview-wrapper {
+  background: $utility-color;
   display: flex;
 }
 .jsview-iframe {
@@ -77,4 +79,3 @@ function runJS(source: string, target: HTMLElement) {
 }
 // <iframe id="sketch-frame"></iframe>
 </style>
-

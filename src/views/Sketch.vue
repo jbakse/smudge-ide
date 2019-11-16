@@ -1,62 +1,59 @@
 <template>
-  <div class="view sketch">
-    <template v-if="sketch.id">
-      <ValidationObserver
-        ref="observer"
-        v-slot="{ invalid, dirty }"
-        class="observer"
+  <ValidationObserver
+    v-if="sketch"
+    ref="observer"
+    v-slot="{ invalid, dirty }"
+    class="sketch"
+  >
+    <div class="header">
+      <h1 class="title">
+        <VeeInput
+          :disabled="!$can('write', sketch)"
+          label="title"
+          vid="title"
+          rules="required|max:60|min:4"
+          v-model="sketch.title"
+        />
+      </h1>
+
+      <div v-if="!$can('write', sketch)" class="owner-username">
+        by
+        <router-link
+          class="simple"
+          :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
+          >{{ sketch.ownerUsername }}</router-link
+        >
+      </div>
+
+      <button
+        v-if="$can('write', sketch)"
+        :class="{ invalid }"
+        :disabled="!dirty || invalid"
+        @click="saveSketch"
       >
-        <div class="header">
-          <h1>
-            <VeeInput
-              :disabled="!$can('write', sketch)"
-              label="title"
-              vid="title"
-              rules="required|max:60|min:4"
-              v-model="sketch.title"
-            />
-          </h1>
+        Save Sketch
+      </button>
 
-          <div v-if="!$can('write', sketch)" class="owner-username">
-            by
-            <router-link
-              class="simple"
-              :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
-              >{{ sketch.ownerUsername }}</router-link
-            >
+      <button v-can="['write', sketch]" @click="deleteSketch" class="text">
+        Delete Sketch
+      </button>
+    </div>
+    <div class="editor row">
+      <div class="column input">
+        <ValidationProvider
+          name="source"
+          rules="max:33088"
+          v-slot="{ errors, classes }"
+        >
+          <ValidationErrors :errors="errors" />
+          <div class="wrap">
+            <CodeEditor v-model="sketch.source" />
           </div>
-
-          <button
-            v-if="$can('write', sketch)"
-            :class="{ invalid }"
-            :disabled="!dirty || invalid"
-            @click="saveSketch"
-          >
-            Save Sketch
-          </button>
-
-          <button v-can="['write', sketch]" @click="deleteSketch" class="text">
-            Delete Sketch
-          </button>
-        </div>
-        <div class="editor row">
-          <div class="column input">
-            <ValidationProvider
-              name="source"
-              rules="max:33088"
-              v-slot="{ errors, classes }"
-            >
-              <ValidationErrors :errors="errors" />
-              <div class="wrap">
-                <CodeEditor v-model="sketch.source" />
-              </div>
-            </ValidationProvider>
-          </div>
-          <JSView class="column output" :source="sketch.source"></JSView>
-        </div>
-      </ValidationObserver>
-    </template>
-  </div>
+        </ValidationProvider>
+      </div>
+      <JSView class="column output" :source="sketch.source"></JSView>
+    </div>
+  </ValidationObserver>
 </template>
 
 <script lang="ts">
@@ -71,30 +68,23 @@ import 'firebase/firestore';
 
 export default Vue.extend({
   name: 'Sketch',
+
   props: ['sketchId'],
+
   components: {
     CodeEditor,
     JSView,
   },
 
   data: () => ({
-    sketch: {} as sketches.Sketch,
+    sketch: null as sketches.Sketch | null,
     type: 'sketch',
   }),
 
-  computed: {},
-
   watch: {
-    // watch for timestamp updates (we reset data from DB) and clear the dirty state
-    'sketch.updated': {
-      handler(timestamp) {
-        // setTimeout(() => (this.$refs.observer as any).reset(), 0);
-      },
-    },
-
-    sketchId: {
+    sketchID: {
       immediate: true,
-      handler(sketchId) {
+      handler() {
         this.$bind('sketch', sketches.sketches.doc(this.sketchId), {
           wait: true,
         }).then();
@@ -104,13 +94,14 @@ export default Vue.extend({
 
   methods: {
     async saveSketch() {
+      if (!this.sketch) return;
       const isValid = await (this.$refs.observer as any).validate();
       if (!isValid) {
         console.error('form not valid!');
         return;
       }
       sketches.saveSketch(this.sketch).then(() => {
-        console.log('saved');
+        // @todo make this a shared func?
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
         });
@@ -120,7 +111,8 @@ export default Vue.extend({
     },
 
     deleteSketch() {
-      sketches.deleteSketch(this.sketchId).then(() => {
+      if (!this.sketch) return;
+      sketches.deleteSketch(this.sketch).then(() => {
         this.$router.replace({
           name: 'user',
           params: { username: auth.user.username },
@@ -129,14 +121,12 @@ export default Vue.extend({
     },
   },
 });
-
-// @todo prettier/eslint file instead of airbnb?
 </script>
 
 <style scoped lang="scss">
 @import '@/scss/_shared.scss';
 
-.view.sketch {
+.sketch {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -154,18 +144,8 @@ export default Vue.extend({
   position: relative;
 }
 
-.output {
-  background: $utility-color;
-}
-
-input.title {
+.title {
   width: 50%;
-}
-
-.observer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .wrap {

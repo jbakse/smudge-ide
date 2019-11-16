@@ -1,12 +1,11 @@
 <template>
-  <div class="view home row">
+  <div class="row">
     <div class="column">
-      <h1>SmudgeJS!</h1>SmudgeJS is a javascript library for creating procedurally generated images that use physically-based rendering properties.
+      <h1>SmudgeJS!</h1>
+      SmudgeJS is a javascript library for creating procedurally generated
+      images that use physically-based rendering properties.
     </div>
-    <div class="column">
-      <h1 v-can:test>Test!</h1>
-      <h1 v-can:test.not>Test Not.</h1>
-    </div>
+    <div class="column"></div>
   </div>
 </template>
 
@@ -18,6 +17,4 @@ export default Vue.extend({
 });
 </script>
 
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -2,6 +2,10 @@
 
 - auth needs to subscribe to profile changes in case display name etc changes
 
+# Build
+
+- @todo prettier/eslint file instead of airbnb?
+
 # Cleanup
 
 - create a list widget, share for sketches and for user list
@@ -30,6 +34,10 @@
   - Move rules to source control instead of the web admin
 
 # By Topic
+
+## Ticky Techy
+
+- remove "| Null" from User and Sketch type?
 
 ## UI UX
 

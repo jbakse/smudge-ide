@@ -4,13 +4,13 @@ import * as auth from '@/firebase/auth';
 const db = firebase.firestore();
 export const sketches = db.collection('sketches');
 
-export type Sketch = {
+export interface Sketch {
   id: string; // document name added as non-enumerable prop by vuefire
   title: string;
   source: string;
   created: firebase.firestore.Timestamp;
   updated: firebase.firestore.Timestamp;
-} | null;
+}
 
 const sketchTemplate = `// require https://cdn.jsdelivr.net/npm/p5@0.7.3/lib/p5.min.js
 // Just a basic p5.js sketch.
@@ -45,7 +45,7 @@ export function createSketch() {
 }
 
 export function saveSketch(sketch: Sketch) {
-  if (sketch == null) return Promise.reject(new Error('Sketch is "null".'));
+  // if (sketch == null) return Promise.reject(new Error('Sketch is "null".'));
   return sketches.doc(sketch.id).update({
     ...sketch,
     updated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -53,6 +53,6 @@ export function saveSketch(sketch: Sketch) {
   // ... spread operator used to exclude id (it is non-enumerable)
 }
 
-export function deleteSketch(sketchId: string) {
-  return sketches.doc(sketchId).delete();
+export function deleteSketch(sketch: Sketch) {
+  return sketches.doc(sketch.id).delete();
 }
