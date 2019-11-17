@@ -1,10 +1,5 @@
 <template>
-  <ValidationObserver
-    v-if="userProfile"
-    class="user"
-    ref="observer"
-    v-slot="{ dirty, invalid }"
-  >
+  <ValidationObserver v-if="userProfile" class="user" ref="observer" v-slot="{ dirty, invalid }">
     <div class="header">
       <h1 class="display-name">
         <VeeInput
@@ -17,13 +12,14 @@
       </h1>
 
       <h2 class="username">
-        <VeeInput
+        {{userProfile.username}}
+        <!-- <VeeInput
           :disabled="!$can('write', userProfile)"
           label="username"
           vid="username"
           rules="required|max:20|min:4"
           v-model="userProfile.username"
-        />
+        />-->
       </h2>
 
       <button
@@ -31,9 +27,7 @@
         :class="{ invalid }"
         :disabled="!dirty || invalid"
         @click="saveProfile"
-      >
-        Save Profile
-      </button>
+      >Save Profile</button>
     </div>
     <div class="row">
       <div class="column">
@@ -42,12 +36,7 @@
       </div>
       <div class="column">
         <h2>Sketches</h2>
-        <input
-          type="search"
-          placeholder="search"
-          v-model="sketchQuery"
-          class="search"
-        />
+        <input type="search" placeholder="search" v-model="sketchQuery" class="search" />
         <router-link
           v-for="sketch in filteredSketches"
           v-bind:key="sketch.id"
@@ -55,17 +44,19 @@
           :to="{ name: 'sketch', params: { sketchId: sketch.id } }"
         >
           <span class="title">{{ sketch.title }}</span>
-          <span class="updated hover-show">{{
+          <span class="updated hover-show">
+            {{
             formatTime(sketch.updated)
-          }}</span>
-          <span class="updated hover-hide">{{
+            }}
+          </span>
+          <span class="updated hover-hide">
+            {{
             relativeTime(sketch.updated)
-          }}</span>
+            }}
+          </span>
         </router-link>
 
-        <button v-can="['write', userProfile]" v-on:click="createSketch">
-          Create Sketch
-        </button>
+        <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
       </div>
     </div>
   </ValidationObserver>

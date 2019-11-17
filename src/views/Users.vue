@@ -33,7 +33,7 @@ export default Vue.extend({
 @import '@/scss/_shared.scss';
 
 .user {
-  @include button($utility-color);
+  @include button(#eee);
   display: block;
 }
 </style>

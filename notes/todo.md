@@ -4,11 +4,9 @@
 
 # Build
 
-- @todo prettier/eslint file instead of airbnb?
-
 # Cleanup
 
-- create a list widget, share for sketches and for user list
+- ? create a list widget, share for sketches and for user list
 - remove About.vue
 
 # Big Issues
@@ -17,18 +15,13 @@
 
 - Given that we can't do text search, do we want to support search at all for sketches, users?
 
-  - Should we remove sketch filter feature now since it might not scale?
+- Should we remove sketch filter feature now since it might not scale?
 
 - Should we put in pagination for sketches, users?
 
 - Do we need to change storage of sketches so that grabbing the names of every sketch for a user is more reasonable (currently we are getting the code also)
 
 ## Validation
-
-- Add vee validate
-
-  - x add it
-  - review it, is it clean?
 
 - Backend Validation
   - Move rules to source control instead of the web admin
@@ -37,11 +30,11 @@
 
 ## Ticky Techy
 
-- remove "| Null" from User and Sketch type?
-
 ## UI UX
 
 - it is not clear that you can edit the dotted underlined fields
+
+- go to a popup modal for editing document info?
 
 - saving workflow
 
@@ -59,7 +52,7 @@
 - Add Change Picture option (to other picture online url, no uploading)
 - Add Description Field
 
-## Scaling Pagination Filiter
+## Scaling Pagination Filter
 
 # Not MVP Features
 
@@ -75,6 +68,6 @@
 
 # Technical Debts
 
-- Usernames are not enforced to be unique on backend. #bigdeal
-- Changing username needs to update denormalized data
+- Usernames are set from github but on the front end and could be changed. Backend could enforce unique usernames and allow username to be set only at creation, not edited. This would -mostly- prevent people from setting their username to something other than whats on github.
+- (changing username no longer allowed) Changing username needs to update denormalized data
 - Backend validation isn't happening
