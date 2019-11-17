@@ -1,6 +1,8 @@
 # Bugs
 
 - auth needs to subscribe to profile changes in case display name etc changes
+  - this is needed so that things that use auth.dispalyname and auth.photoURL, etc are updated.
+  - but this doesn't happen that much...
 
 # Build
 
@@ -49,8 +51,8 @@
 
 ## Profile
 
-- Add Change Picture option (to other picture online url, no uploading)
-- Add Description Field
+- x Add Change Picture option (to other picture online url, no uploading)
+- no. Add Description Field
 
 ## Scaling Pagination Filter
 

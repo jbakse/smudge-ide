@@ -32,6 +32,16 @@
     <div class="row">
       <div class="column">
         <h2>Profile</h2>
+
+        <div class="form-group" v-if="$can('write', userProfile)">
+          <label>Photo URL</label>
+          <VeeInput
+            label="photoURL"
+            vid="photoURL"
+            rules="max:2048"
+            v-model="userProfile.photoURL"
+          />
+        </div>
         <img class="user-photo" v-bind:src="userProfile.photoURL" />
       </div>
       <div class="column">

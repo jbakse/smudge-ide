@@ -65,7 +65,9 @@ const menuOptions = [
 
 <style scoped lang="scss">
 .user-photo {
+  object-fit: cover;
   height: 30px;
+  width: 30px;
   position: relative;
   top: 1px;
   border-radius: 15px;

@@ -64,6 +64,10 @@ dd + dt {
 ////////////////////////////////
 // Forms
 
+.form-group {
+  margin-bottom: $vertical-margin;
+}
+
 button {
   @include button($accent-color);
 }
