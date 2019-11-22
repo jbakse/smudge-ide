@@ -15,10 +15,10 @@
 
 ## Scaling + Search + Pagination
 
-- Given that we can't do text search, do we want to support search at all for sketches, users?
+- x Given that we can't do text search, do we want to support search at all for sketches, users?
   : no out of scope
 
-- Should we remove sketch filter feature now since it might not scale?
+- x Should we remove sketch filter feature now since it might not scale?
   : yes
 
 - Should we put in pagination for sketches, users?

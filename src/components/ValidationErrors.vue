@@ -17,20 +17,21 @@ export default Vue.extend({
 @import '@/scss/_shared.scss';
 
 .error-messages {
-  font-size: 1rem;
+  font-size: 0.7rem;
   color: red;
   font-weight: normal;
 
-  background: $light-gray;
+  // background: $light-gray;
   display: inline-block;
-  padding: 10px;
+  padding: 0px;
   margin: 0;
+  margin-bottom: 1em;
 
   li {
     list-style: none;
-    &:before {
-      content: '➤ ';
-    }
+    // &:before {
+    //   content: '➤ ';
+    // }
   }
 }
 </style>
