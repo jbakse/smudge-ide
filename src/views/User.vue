@@ -46,9 +46,9 @@
       </div>
       <div class="column">
         <h2>Sketches</h2>
-        <input type="search" placeholder="search" v-model="sketchQuery" class="search" />
+        <!-- <input type="search" placeholder="search" v-model="sketchQuery" class="search" /> -->
         <router-link
-          v-for="sketch in filteredSketches"
+          v-for="sketch in sketches"
           v-bind:key="sketch.id"
           class="sketches-item"
           :to="{ name: 'sketch', params: { sketchId: sketch.id } }"
@@ -125,11 +125,11 @@ export default Vue.extend({
   },
 
   computed: {
-    filteredSketches() {
-      return _.filter(this.sketches, (s: any) =>
-        s.title.toLowerCase().includes(this.sketchQuery.toLowerCase())
-      );
-    },
+    // filteredSketches() {
+    //   return _.filter(this.sketches, (s: any) =>
+    //     s.title.toLowerCase().includes(this.sketchQuery.toLowerCase())
+    //   );
+    // },
   },
 
   methods: {
