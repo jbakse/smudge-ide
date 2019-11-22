@@ -16,12 +16,17 @@
 ## Scaling + Search + Pagination
 
 - Given that we can't do text search, do we want to support search at all for sketches, users?
+  : no out of scope
 
 - Should we remove sketch filter feature now since it might not scale?
+  : yes
 
 - Should we put in pagination for sketches, users?
+  : yes
+  : users maybe get alphabet index
 
 - Do we need to change storage of sketches so that grabbing the names of every sketch for a user is more reasonable (currently we are getting the code also)
+  : not yet
 
 ## Validation
 
@@ -44,6 +49,8 @@
   - disable (or allow toggle) live preview
   - live previewing javascript dangerous for non terminating loops
   - add keyboard shortcuts?!
+  - saving on your own file 1) saves 2) updates view
+  - saving on someone elses file 1) saves to local storage 2) upates view 3) add message prompting user to fork or reset (time out after a day, count down)
 
 - ? Highlight auth user (and maybe their sketches) in lists
 
@@ -53,6 +60,8 @@
 
 - x Add Change Picture option (to other picture online url, no uploading)
 - no. Add Description Field
+- tie image to gitub image
+  - auto update github name and github image
 
 ## Scaling Pagination Filter
 
@@ -64,7 +73,7 @@
   - Keep history of file
   - List sketches that fork from
 
-- Categories/Tags
+- Categories/Tags/Collecitons
 
 - Random Script Generator
 
