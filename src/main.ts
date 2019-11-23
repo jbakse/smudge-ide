@@ -33,6 +33,9 @@ Vue.component('ValidationErrors', ValidationErrors);
 import VeeInput from '@/components/VeeInput.vue';
 Vue.component('VeeInput', VeeInput);
 
+import VeeInputAuto from '@/components/VeeInputAuto.vue';
+Vue.component('VeeInputAuto', VeeInputAuto);
+
 /////////////////////////////////////
 // config Vue
 Vue.config.productionTip = false;

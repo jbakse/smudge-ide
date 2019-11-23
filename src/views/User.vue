@@ -2,48 +2,36 @@
   <ValidationObserver v-if="userProfile" class="user" ref="observer" v-slot="{ dirty, invalid }">
     <div class="header">
       <h1 class="display-name">
-        <VeeInput
+        {{userProfile.displayName}}
+        <VeeInputAuto
           :disabled="!$can('write', userProfile)"
           label="display name"
           vid="displayName"
           rules="required|max:30|min:4"
           v-model="userProfile.displayName"
+          @input="saveProfile"
         />
       </h1>
-
-      <h2 class="username">
+      <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
+      <!-- <h2 class="username">
         {{userProfile.username}}
-        <!-- <VeeInput
+        <VeeInput
           :disabled="!$can('write', userProfile)"
           label="username"
           vid="username"
           rules="required|max:20|min:4"
           v-model="userProfile.username"
-        />-->
-      </h2>
+        />
+      </h2>-->
 
-      <button
+      <!-- <button
         v-if="$can('write', userProfile)"
         :class="{ invalid }"
         :disabled="!dirty || invalid"
         @click="saveProfile"
-      >Save Profile</button>
+      >Save Profile</button>-->
     </div>
     <div class="row">
-      <div class="column">
-        <h2>Profile</h2>
-
-        <div class="form-group" v-if="$can('write', userProfile)">
-          <label>Photo URL</label>
-          <VeeInput
-            label="photoURL"
-            vid="photoURL"
-            rules="max:2048"
-            v-model="userProfile.photoURL"
-          />
-        </div>
-        <img class="user-photo" v-bind:src="userProfile.photoURL" />
-      </div>
       <div class="column">
         <h2>Sketches</h2>
         <!-- <input type="search" placeholder="search" v-model="sketchQuery" class="search" /> -->
@@ -65,8 +53,21 @@
             }}
           </span>
         </router-link>
+      </div>
 
-        <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
+      <div class="column">
+        <!-- <h2>Profile</h2>
+
+        <div class="form-group" v-if="$can('write', userProfile)">
+          <label>Photo URL</label>
+          <VeeInput
+            label="photoURL"
+            vid="photoURL"
+            rules="max:2048"
+            v-model="userProfile.photoURL"
+          />
+        </div>
+        <img class="user-photo" v-bind:src="userProfile.photoURL" />-->
       </div>
     </div>
   </ValidationObserver>
@@ -142,6 +143,8 @@ export default Vue.extend({
     },
 
     async saveProfile() {
+      console.log('save p');
+
       if (!this.userProfile) return;
       const isValid = await (this.$refs.observer as any).validate();
       if (!isValid) {
