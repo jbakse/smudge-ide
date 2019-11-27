@@ -1,9 +1,5 @@
 # Bugs
 
-- auth needs to subscribe to profile changes in case display name etc changes
-  - this is needed so that things that use auth.dispalyname and auth.photoURL, etc are updated.
-  - but this doesn't happen that much...
-
 # Build
 
 # Cleanup
@@ -77,8 +73,37 @@
 
 - Random Script Generator
 
+# Auth
+
+- Syncing usernames from github is probably a bad idea. Imagine
+  Anne is zero_cool on github
+  Bary is crash_overdrive on github
+  Anne makes an account on smudge called zero_cool
+  Anne changes name to zero_cooler
+  Bary changes name to zero_cool on github
+  Bary creates an account on smudge .... but zero_cool is taken
+
+  Basically can't assume that username on github is the same as on smudge
+
+* auth should check for changes to username and image every load
+  - nope see above
+* auth needs to subscribe to profile changes in case display name etc changes
+
+  - this is needed so that things that use auth.dispalyname and auth.photoURL, etc are updated.
+  - but this doesn't happen that much...
+
+  - Does Auth even need to pull data from the profile anymore?
+
 # Technical Debts
 
 - Usernames are set from github but on the front end and could be changed. Backend could enforce unique usernames and allow username to be set only at creation, not edited. This would -mostly- prevent people from setting their username to something other than whats on github.
 - (changing username no longer allowed) Changing username needs to update denormalized data
 - Backend validation isn't happening
+
+# Won't Dos
+
+I don't really like VeeValidate or how validating is tied to the interface more than the data model. I'd like to pull out VeeValidate altogether, and have Sketch and User objects handle all of this:
+
+1. Binding to firebase, auto updating
+2. Tracking validation and dirty status
+3. Tracking reset/cancel values (original values since last save)

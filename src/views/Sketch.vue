@@ -1,52 +1,54 @@
 <template>
-  <ValidationObserver
-    v-if="sketch"
-    ref="observer"
-    v-slot="{ invalid, dirty }"
-    class="sketch"
-  >
+  <ValidationObserver v-if="sketch" ref="observer" v-slot="{ invalid, dirty }" class="sketch">
     <div class="header">
       <h1 class="title">
-        <VeeInput
+        <VeeInputAuto
           :disabled="!$can('write', sketch)"
           label="title"
           vid="title"
           rules="required|max:60|min:4"
           v-model="sketch.title"
         />
+
+        <!-- <VeeInput
+          :disabled="!$can('write', sketch)"
+          label="title"
+          vid="title"
+          rules="required|max:60|min:4"
+          v-model="sketch.title"
+        />-->
       </h1>
 
-      <div v-if="!$can('write', sketch)" class="owner-username">
+      <div class="owner-username">
         by
         <router-link
           class="simple"
           :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
-          >{{ sketch.ownerUsername }}</router-link
-        >
+        >{{ sketch.ownerUsername }}</router-link>
       </div>
 
-      <button
+      <!-- <button
         v-if="$can('write', sketch)"
         :class="{ invalid }"
         :disabled="!dirty || invalid"
         @click="saveSketch"
-      >
-        Save Sketch
-      </button>
+      >Save Sketch</button>-->
 
-      <button v-can="['write', sketch]" @click="deleteSketch" class="text">
-        Delete Sketch
-      </button>
+      <div class="buttons">
+        <button
+          v-if="$can('write', sketch)"
+          :class="{ invalid }"
+          :disabled="!dirty || invalid"
+          @click="saveSketch"
+        >Save Sketch</button>
+        <button v-if="$can('write', sketch)" @click="deleteSketch" class="right text">Delete Sketch</button>
+      </div>
     </div>
     <div class="editor row">
       <div class="column input">
-        <ValidationProvider
-          name="source"
-          rules="max:33088"
-          v-slot="{ errors, classes }"
-        >
+        <ValidationProvider name="source" rules="max:33088" v-slot="{ errors, classes }">
           <ValidationErrors :errors="errors" />
-          <div class="wrap">
+          <div class="editor-wrap">
             <CodeEditor v-model="sketch.source" />
           </div>
         </ValidationProvider>
@@ -100,8 +102,9 @@ export default Vue.extend({
         console.error('form not valid!');
         return;
       }
+
       sketches.saveSketch(this.sketch).then(() => {
-        // @todo make this a shared func?
+        // @todo make; this; a; shared; func ?
         requestAnimationFrame(() => {
           (this.$refs.observer as any).reset();
         });
@@ -130,10 +133,25 @@ export default Vue.extend({
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-top: $vertical-margin;
 }
 
 .header {
   margin-bottom: $vertical-margin;
+}
+
+.title {
+  width: 50%;
+  margin: 0;
+}
+
+.buttons {
+  margin-top: $vertical-margin;
+  position: relative;
+}
+
+.buttons .right {
+  float: right;
 }
 
 .editor {
@@ -144,11 +162,7 @@ export default Vue.extend({
   position: relative;
 }
 
-.title {
-  width: 50%;
-}
-
-.wrap {
+.editor-wrap {
   position: relative;
   height: 100%;
 }

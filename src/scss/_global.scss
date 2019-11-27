@@ -81,17 +81,10 @@ input.inherit,
   color: inherit;
   width: 100%;
   border: none;
-  border-bottom: 3px dotted $accent-color;
-  &:focus {
-    background-color: $light-gray;
-  }
-  outline: none;
-}
+  padding: 0;
+  // border-bottom: 3px dotted $accent-color;
 
-input:disabled.inherit {
-  border: none;
-  background: none;
-  color: inherit;
+  outline: none;
 }
 
 input.search {

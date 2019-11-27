@@ -1,8 +1,7 @@
 <template>
-  <ValidationObserver v-if="userProfile" class="user" ref="observer" v-slot="{ dirty, invalid }">
+  <div v-if="userProfile" class="user">
     <div class="header">
       <h1 class="display-name">
-        {{userProfile.displayName}}
         <VeeInputAuto
           :disabled="!$can('write', userProfile)"
           label="display name"
@@ -12,29 +11,16 @@
           @input="saveProfile"
         />
       </h1>
-      <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
-      <!-- <h2 class="username">
-        {{userProfile.username}}
-        <VeeInput
-          :disabled="!$can('write', userProfile)"
-          label="username"
-          vid="username"
-          rules="required|max:20|min:4"
-          v-model="userProfile.username"
-        />
-      </h2>-->
 
-      <!-- <button
-        v-if="$can('write', userProfile)"
-        :class="{ invalid }"
-        :disabled="!dirty || invalid"
-        @click="saveProfile"
-      >Save Profile</button>-->
+      <div class="owner-username">{{ userProfile.username }}</div>
+
+      <div class="buttons">
+        <button v-can="['write', userProfile]" v-on:click="createSketch">Create Sketch</button>
+      </div>
     </div>
     <div class="row">
       <div class="column">
         <h2>Sketches</h2>
-        <!-- <input type="search" placeholder="search" v-model="sketchQuery" class="search" /> -->
         <router-link
           v-for="sketch in sketches"
           v-bind:key="sketch.id"
@@ -55,22 +41,9 @@
         </router-link>
       </div>
 
-      <div class="column">
-        <!-- <h2>Profile</h2>
-
-        <div class="form-group" v-if="$can('write', userProfile)">
-          <label>Photo URL</label>
-          <VeeInput
-            label="photoURL"
-            vid="photoURL"
-            rules="max:2048"
-            v-model="userProfile.photoURL"
-          />
-        </div>
-        <img class="user-photo" v-bind:src="userProfile.photoURL" />-->
-      </div>
+      <div class="column"></div>
     </div>
-  </ValidationObserver>
+  </div>
 </template>
 
 <script lang="ts">
@@ -98,7 +71,6 @@ export default Vue.extend({
     username: {
       immediate: true,
       handler() {
-        console.log('watch username');
         users.users
           .where('username', '==', this.username)
           .limit(1) // @todo enforce username uniqueness backend + frontend
@@ -125,13 +97,7 @@ export default Vue.extend({
     },
   },
 
-  computed: {
-    // filteredSketches() {
-    //   return _.filter(this.sketches, (s: any) =>
-    //     s.title.toLowerCase().includes(this.sketchQuery.toLowerCase())
-    //   );
-    // },
-  },
+  computed: {},
 
   methods: {
     formatTime(time: firestore.Timestamp) {
@@ -143,19 +109,9 @@ export default Vue.extend({
     },
 
     async saveProfile() {
-      console.log('save p');
-
+      console.log('Save profile');
       if (!this.userProfile) return;
-      const isValid = await (this.$refs.observer as any).validate();
-      if (!isValid) {
-        console.error('form not valid!');
-        return;
-      }
       users.saveProfile(this.userProfile).then(() => {
-        console.log('saved');
-        requestAnimationFrame(() => {
-          (this.$refs.observer as any).reset();
-        });
         snackbar.show('Profile Saved!');
       });
     },
@@ -181,18 +137,32 @@ export default Vue.extend({
 <style scoped lang="scss">
 @import '@/scss/_shared.scss';
 
-.user-photo {
-  width: 100%;
+.user {
+  margin-top: $vertical-margin;
+}
+
+.header {
+  margin-bottom: $vertical-margin;
 }
 
 .display-name {
   width: 50%;
+  margin: 0;
 }
 
 .username {
-  width: 25%;
+  width: 50%;
   font-weight: normal;
   font-size: 18px;
+}
+
+.buttons {
+  margin-top: $vertical-margin;
+  position: relative;
+}
+
+.user-photo {
+  width: 100%;
 }
 
 .sketches-item {
