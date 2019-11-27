@@ -3,40 +3,40 @@ import { firebase } from './firebase';
 const db = firebase.firestore();
 const users = db.collection('users');
 
-// function generateUsername() {
-//   const chars = 'abcdefghijklmnopqrstuvwxyz';
-//   let username = '';
-//   for (let i = 0; i < 10; i++) {
-//     username += chars[Math.floor(Math.random() * chars.length)];
-//   }
-//   return username;
-// }
+function generateUsername() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  let username = '';
+  for (let i = 0; i < 10; i++) {
+    username += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return username;
+}
 
 class Auth {
+  public ready: boolean = false;
   public loggedIn: boolean = false;
   public uid: string = '';
   public email: string | null = '';
   public username: string = '';
   public displayName: string = '';
   public photoURL: string = '';
-  public ready: boolean = false;
-  private user: firebase.User | null;
+  // private user: firebase.User | null;
 
   constructor() {
-    this.user = null;
+    // this.user = null;
 
     firebase.auth().onAuthStateChanged((newUser) => {
       this.ready = true;
-      this.user = newUser;
+      // this.user = newUser;
       if (newUser) {
         console.log('user signed in!');
         this.loggedIn = true;
         this.uid = newUser.uid;
         this.email = newUser.email;
-        this.loadUserProfile();
+
+        this.loadUserProfile(newUser);
       } else {
         console.log('user signed out!');
-
         this.loggedIn = false;
         this.uid = '';
         this.email = '';
@@ -58,45 +58,26 @@ class Auth {
     firebase.auth().signOut();
   }
 
-  private async fetchUsername() {
+  private async loadUserProfile(newUser: firebase.User) {
     try {
-      const result = await firebase.auth().getRedirectResult();
-      if (result.credential) {
-        const token = (result.credential as any).accessToken;
-        const response = await fetch('https://api.github.com/user', {
-          headers: {
-            Authorization: `token ${token}`,
-          },
-        });
-        const json = await response.json();
-        const login = json.login;
-        return login;
-      }
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error(errorCode, errorMessage);
-    }
-  }
+      const userDoc = await users.doc(newUser.uid).get();
 
-  private async loadUserProfile() {
-    try {
-      const userDoc = await users.doc(this.uid).get();
-
-      if (!userDoc.exists && this.user) {
-        const username = await this.fetchUsername(); // displayName.replace(/\W/g, '');
-        if (!username) {
-          this.signOut();
-          return;
-        }
-        const displayName = this.user.displayName || username;
-        const photoURL = this.user.photoURL || '';
+      if (!userDoc.exists) {
+        // const username = await this.fetchUsername(); // displayName.replace(/\W/g, '');
+        const username = (await fetchGithubUsername()) || generateUsername();
+        // if (!username) {
+        //   this.signOut();
+        //   return;
+        // }
+        const displayName = newUser.displayName || username;
+        const photoURL = newUser.photoURL || '';
 
         users.doc(this.uid).set({
           username,
           displayName,
           photoURL,
         });
+
         this.username = username;
         this.displayName = displayName;
         this.photoURL = photoURL;
@@ -108,6 +89,35 @@ class Auth {
     } catch (err) {
       console.error('error getting user profile', err);
     }
+  }
+}
+
+async function fetchGithubUsername(): Promise<string | undefined> {
+  console.log('fetchUsername');
+  try {
+    const result = await firebase.auth().getRedirectResult();
+    console.log('result', result);
+    if (result.user === null) {
+      // no redirect operation was called
+      return undefined;
+    }
+
+    if (result.credential) {
+      const token = (result.credential as any).accessToken;
+      const response = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      });
+      const json = await response.json();
+      const login = json.login;
+      return login;
+    }
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error(errorCode, errorMessage);
+    return undefined;
   }
 }
 
