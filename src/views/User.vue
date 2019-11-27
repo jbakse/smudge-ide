@@ -146,12 +146,12 @@ export default Vue.extend({
 }
 
 .display-name {
-  width: 50%;
+  max-width: 600px;
   margin: 0;
 }
 
 .username {
-  width: 50%;
+  max-width: 400px;
   font-weight: normal;
   font-size: 18px;
 }
@@ -164,7 +164,9 @@ export default Vue.extend({
 .user-photo {
   width: 100%;
 }
-
+.column {
+  width: 50%;
+}
 .sketches-item {
   @include button(#eee);
   display: block;
@@ -173,6 +175,16 @@ export default Vue.extend({
   justify-content: space-between;
   .updated {
     color: #aaa;
+
+    width: 175px;
+    text-align: right;
+  }
+
+  .title {
+    flex: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 

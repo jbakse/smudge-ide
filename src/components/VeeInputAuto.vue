@@ -41,10 +41,19 @@ export default Vue.extend({
     resetValue: '',
     editValue: '',
   }),
-  mounted() {
-    this.editValue = this.value;
-    this.resetValue = this.value;
+  watch: {
+    value: {
+      immediate: true,
+      handler() {
+        this.editValue = this.value;
+        this.resetValue = this.value;
+      },
+    },
   },
+  // mounted() {
+  //   this.editValue = this.value;
+  //   this.resetValue = this.value;
+  // },
   methods: {
     // focus() {
     //   this.resetValue = this.value;

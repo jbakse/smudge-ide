@@ -1,7 +1,8 @@
 import { firebase } from './firebase';
 
+import * as users from '@/firebase/users';
 const db = firebase.firestore();
-const users = db.collection('users');
+// const users = db.collection('users');
 
 function generateUsername() {
   const chars = 'abcdefghijklmnopqrstuvwxyz';
@@ -20,6 +21,7 @@ class Auth {
   public username: string = '';
   public displayName: string = '';
   public photoURL: string = '';
+
   // private user: firebase.User | null;
 
   constructor() {
@@ -35,6 +37,7 @@ class Auth {
         this.email = newUser.email;
 
         this.loadUserProfile(newUser);
+        users.updateLastLogin(this.uid);
       } else {
         console.log('user signed out!');
         this.loggedIn = false;
@@ -60,7 +63,7 @@ class Auth {
 
   private async loadUserProfile(newUser: firebase.User) {
     try {
-      const userDoc = await users.doc(newUser.uid).get();
+      const userDoc = await users.users.doc(newUser.uid).get();
 
       if (!userDoc.exists) {
         // const username = await this.fetchUsername(); // displayName.replace(/\W/g, '');
@@ -72,7 +75,7 @@ class Auth {
         const displayName = newUser.displayName || username;
         const photoURL = newUser.photoURL || '';
 
-        users.doc(this.uid).set({
+        users.users.doc(this.uid).set({
           username,
           displayName,
           photoURL,

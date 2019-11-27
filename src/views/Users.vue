@@ -1,13 +1,17 @@
 <template>
   <div class="view users">
+    <h1>Users</h1>
     <template v-if="users.length">
-      <h1>Users</h1>
       <router-link
         class="user"
         v-for="user in users"
         v-bind:key="user.username"
         :to="{ name: 'user', params: {username: user.username}}"
       >{{user.username}}</router-link>
+
+      <div class="buttons">
+        <button @click="more">Show More</button>
+      </div>
     </template>
   </div>
 </template>
@@ -15,16 +19,49 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { users } from '@/firebase/users';
+import * as users from '@/firebase/users';
 
 export default Vue.extend({
   name: 'Users',
   firestore: {
-    users: users.orderBy('username').limit(30),
+    users: users.users.orderBy('username').limit(50),
   },
+  // watch: {
+  //   pageNumber: {
+  //     immediate: true,
+  //     handler() {
+  //       console.log(this.pageNumber);
+  //       this.$bind(
+  //         'users',
+  //         users
+  //           .orderBy('username')
+  //           .limit(2)
+  //           .startAt(null)
+  //       );
+  //     },
+  //   },
+  // },
   data: () => ({
-    users: [],
+    users: [] as users.UserProfile[],
+    pageNumber: 0,
   }),
+  computed: {
+    pageCount() {
+      return 3;
+    },
+  },
+  methods: {
+    more() {
+      const lastUser = this.users[this.users.length - 1];
+      this.$bind(
+        'users',
+        users.users
+          .orderBy('username')
+          .limit(50)
+          .startAfter(lastUser.username)
+      );
+    },
+  },
 });
 </script>
 

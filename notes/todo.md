@@ -4,25 +4,11 @@
 
 # Cleanup
 
-- ? create a list widget, share for sketches and for user list
-- remove About.vue
-
 # Big Issues
 
 ## Scaling + Search + Pagination
 
-- Given that we can't do text search, do we want to support search at all for sketches, users?
-  : no out of scope
-
-- Should we remove sketch filter feature now since it might not scale?
-  : yes
-
-- Should we put in pagination for sketches, users?
-  : yes
-  : users maybe get alphabet index
-
-- Do we need to change storage of sketches so that grabbing the names of every sketch for a user is more reasonable (currently we are getting the code also)
-  : not yet
+: well search and pagination kinda suck with firebase (see firebase problems below)
 
 ## Validation
 
@@ -34,10 +20,6 @@
 ## Ticky Techy
 
 ## UI UX
-
-- it is not clear that you can edit the dotted underlined fields
-
-- go to a popup modal for editing document info?
 
 - saving workflow
 
@@ -99,6 +81,25 @@
 - Usernames are set from github but on the front end and could be changed. Backend could enforce unique usernames and allow username to be set only at creation, not edited. This would -mostly- prevent people from setting their username to something other than whats on github.
 - (changing username no longer allowed) Changing username needs to update denormalized data
 - Backend validation isn't happening
+
+# Problems with Firestore
+
+- pagination doesn't work so well
+
+  - cant get a document count for a collection
+    https://stackoverflow.com/questions/46554091/cloud-firestore-collection-count
+  - can't set a pagination offest by index (only by start at a sorted value postion)
+  - This might make sense for large scalability, but still a problem if you want to do this.
+
+- no text search/fuzzy text search.
+
+  - you _cant_ do "ppl" -> "apple"
+  - you _can_ sort alphabetically and pull the first record after a search. "apple", "cat", "dog" you could search for "c" -> "cat" "b" -> "cat" also...
+
+- firestore is backendless but you just end up making a backend with rules and functions
+  - enforcing unique is a bit of a thing
+    https://stackoverflow.com/questions/47405774/cloud-firestore-enforcing-unique-user-names
+  - probably best to make a `setUsername` cloud function
 
 # Won't Dos
 

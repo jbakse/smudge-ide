@@ -9,14 +9,6 @@
           rules="required|max:60|min:4"
           v-model="sketch.title"
         />
-
-        <!-- <VeeInput
-          :disabled="!$can('write', sketch)"
-          label="title"
-          vid="title"
-          rules="required|max:60|min:4"
-          v-model="sketch.title"
-        />-->
       </h1>
 
       <div class="owner-username">
@@ -25,6 +17,22 @@
           class="simple"
           :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
         >{{ sketch.ownerUsername }}</router-link>
+      </div>
+      <div class="forked-from" v-for="sketch in forkedFrom" v-bind:key="sketch.id">
+        forked from
+        <router-link
+          class="simple"
+          :to="{ name: 'sketch', params: { sketchId: sketch.id } }"
+        >{{ sketch.title }}</router-link>&nbsp;by
+        <router-link
+          class="simple"
+          :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
+        >{{ sketch.ownerUsername }}</router-link>
+
+        <!-- <router-link
+          class="simple"
+          :to="{ name: 'user', params: { username: sketch.ownerUsername } }"
+        >{{ sketch.ownerUsername }}</router-link>-->
       </div>
 
       <!-- <button
@@ -41,6 +49,9 @@
           :disabled="!dirty || invalid"
           @click="saveSketch"
         >Save Sketch</button>
+
+        <button @click="forkSketch">Fork Sketch</button>
+
         <button v-if="$can('write', sketch)" @click="deleteSketch" class="right text">Delete Sketch</button>
       </div>
     </div>
@@ -56,6 +67,7 @@
       <JSView class="column output" :source="sketch.source"></JSView>
     </div>
   </ValidationObserver>
+  <h1 v-else>Sketch not found.</h1>
 </template>
 
 <script lang="ts">
@@ -84,13 +96,31 @@ export default Vue.extend({
   }),
 
   watch: {
-    sketchID: {
+    sketchId: {
       immediate: true,
       handler() {
+        console.log('Watch', this.sketchId);
         this.$bind('sketch', sketches.sketches.doc(this.sketchId), {
           wait: true,
-        }).then();
+        }).then((i) => {
+          if (i && i.id !== this.sketchId) {
+            this.$unbind('sketch');
+          }
+        });
       },
+    },
+  },
+
+  computed: {
+    forkedFrom(): any[] {
+      if (!this.sketch) return [];
+      const forkedFrom = this.sketch.forkedFrom;
+
+      if (!forkedFrom || !forkedFrom.length) {
+        return [];
+      }
+
+      return [forkedFrom.slice().reverse()[0]];
     },
   },
 
@@ -111,6 +141,27 @@ export default Vue.extend({
 
         snackbar.show('Sketch Saved!');
       });
+    },
+
+    async forkSketch() {
+      if (!this.sketch) return;
+      const isValid = await (this.$refs.observer as any).validate();
+      if (!isValid) {
+        console.error('form not valid!');
+        return;
+      }
+
+      sketches
+        .forkSketch(this.sketch)
+        .then((docRef) => {
+          this.$router.push({
+            name: 'sketch',
+            params: { sketchId: docRef.id },
+          });
+        })
+        .catch((err) => {
+          console.log('error forking sketch outer', err);
+        });
     },
 
     deleteSketch() {
