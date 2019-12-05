@@ -9,6 +9,7 @@
 ## Scaling + Search + Pagination
 
 : well search and pagination kinda suck with firebase (see firebase problems below)
+: shelve this for now, focus on min feature set
 
 ## Validation
 
@@ -25,8 +26,8 @@
 
   - support fork
   - disable (or allow toggle) live preview
-  - live previewing javascript dangerous for non terminating loops
-  - add keyboard shortcuts?!
+  - live previewing javascript dangerous for non terminating loops, etc
+  - add keyboard shortcuts?! save/preview/format?
   - saving on your own file 1) saves 2) updates view
   - saving on someone elses file 1) saves to local storage 2) upates view 3) add message prompting user to fork or reset (time out after a day, count down)
 
@@ -61,7 +62,7 @@
   Anne is zero_cool on github
   Bary is crash_overdrive on github
   Anne makes an account on smudge called zero_cool
-  Anne changes name to zero_cooler
+  Anne changes name to zero_cooler on github
   Bary changes name to zero_cool on github
   Bary creates an account on smudge .... but zero_cool is taken
 
