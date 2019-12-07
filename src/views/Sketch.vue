@@ -70,7 +70,7 @@
         <ValidationProvider name="source" rules="max:33088" v-slot="{ errors, classes }">
           <ValidationErrors :errors="errors" />
           <div class="editor-wrap">
-            <CodeEditor v-model="localSource" @input="onSourceInput" />
+            <CodeEditor v-model="localSource" @input="onSourceInput" @keyHandled="keyHandled" />
           </div>
         </ValidationProvider>
       </div>
@@ -162,6 +162,13 @@ export default Vue.extend({
   },
 
   methods: {
+    async keyHandled(instance: any, name: string, event: Event) {
+      // console.log('key handled2', instance, name, event);
+      if (name === 'Ctrl-S' || name === 'Cmd-S') {
+        this.saveSketch();
+      }
+    },
+
     async onSourceInput() {
       console.log('source input');
       if (!this.sketch) return;

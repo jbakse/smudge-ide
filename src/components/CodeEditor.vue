@@ -1,5 +1,5 @@
 <template>
-  <codemirror v-bind:value="value" v-on:input="emit" :options="cmOptions"></codemirror>
+  <codemirror v-bind:value="value" @keyHandled="keyHandled" v-on:input="emit" :options="cmOptions"></codemirror>
 </template>
 
 <script lang="ts">
@@ -28,11 +28,22 @@ export default Vue.extend({
       theme: 'base16-light',
       lineNumbers: true,
       line: true,
+      extraKeys: {
+        'Cmd-S': () => {
+          return;
+        },
+        'Ctrl-S': () => {
+          return;
+        },
+      },
       //   scrollbarStyle: 'overlay',
     },
   }),
 
   methods: {
+    async keyHandled(instance: any, name: string, event: Event) {
+      this.$emit('keyHandled', instance, name, event);
+    },
     emit($event: any) {
       this.$emit('input', $event);
     },
