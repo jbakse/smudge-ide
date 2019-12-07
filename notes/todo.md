@@ -1,3 +1,11 @@
+@ forking
+: when you fork it creates a copy of the current sketch with the "revert" source not the "live" source
+: it then brings you to that copy, without touching the text editor.
+so you have "base sketch" revert + edits
+and you have "forked sketch" revert + edits
+anyway thats weird.
+Forking should create a copy with the edits applied, clear the local edits from base, show you the fork clean with no local edits.
+
 # Bugs
 
 # Build

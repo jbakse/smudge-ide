@@ -50,21 +50,32 @@
           @click="saveSketch"
         >Save Sketch</button>
 
-        <button @click="forkSketch">Fork Sketch</button>
+        <!-- <button v-if="hasLocalEdits" @click="revertLocalSource">Revert Sketch</button> -->
+        <button v-if="user.loggedIn" @click="forkSketch">Fork Sketch</button>
 
         <button v-if="$can('write', sketch)" @click="deleteSketch" class="right text">Delete Sketch</button>
+        <button v-if="hasLocalEdits" @click="revertLocalSource" class="right text">Revert Sketch</button>
       </div>
+
+      <div v-if="hasLocalEdits" class="local-edit-message">
+        <span v-if="!user.loggedIn">Log in to save local changes.</span>
+        <span v-else>This sketch has local changes.</span>
+        <!-- <span class="link" @click="revertLocalSource">revert</span> -->
+      </div>
+      <div v-else class="local-edit-message">&nbsp;</div>
+      <!-- {{hasLocalCache}} -->
     </div>
     <div class="editor row">
       <div class="column input">
         <ValidationProvider name="source" rules="max:33088" v-slot="{ errors, classes }">
           <ValidationErrors :errors="errors" />
           <div class="editor-wrap">
-            <CodeEditor v-model="sketch.source" />
+            <CodeEditor v-model="localSource" @input="onSourceInput" />
           </div>
         </ValidationProvider>
       </div>
-      <JSView class="column output" :source="sketch.source"></JSView>
+      <!-- <pre>{{sketch.source}}</pre> -->
+      <JSView class="column output" :source="localSource"></JSView>
     </div>
   </ValidationObserver>
   <h1 v-else>Sketch not found.</h1>
@@ -80,6 +91,8 @@ import JSView from '@/components/JSView.vue';
 
 import 'firebase/firestore';
 
+const storage = sessionStorage;
+
 export default Vue.extend({
   name: 'Sketch',
 
@@ -92,14 +105,24 @@ export default Vue.extend({
 
   data: () => ({
     sketch: null as sketches.Sketch | null,
+    localSource: '',
     type: 'sketch',
+    user: auth.user,
+    // hasLocalCache: false,
   }),
+
+  // mounted() {
+  //   setInterval(() => {
+  //     this.hasLocalCache =
+  //       !!storage.getItem(this.sketchId) + ' ' + this.sketchId;
+  //   }, 400);
+  // },
 
   watch: {
     sketchId: {
       immediate: true,
       handler() {
-        console.log('Watch', this.sketchId);
+        console.log('watch sketch id', this.sketchId);
         this.$bind('sketch', sketches.sketches.doc(this.sketchId), {
           wait: true,
         }).then((i) => {
@@ -109,47 +132,98 @@ export default Vue.extend({
         });
       },
     },
+    'sketch.source': {
+      handler(sketchSource) {
+        console.log('watch sketch source', this.sketchId);
+        const localSource = storage.getItem(this.sketchId);
+        if (localSource) {
+          this.localSource = localSource;
+        } else {
+          this.localSource = sketchSource;
+        }
+      },
+    },
   },
 
   computed: {
     forkedFrom(): any[] {
       if (!this.sketch) return [];
       const forkedFrom = this.sketch.forkedFrom;
-
       if (!forkedFrom || !forkedFrom.length) {
         return [];
       }
-
       return [forkedFrom.slice().reverse()[0]];
+    },
+
+    hasLocalEdits(): boolean {
+      if (!this.sketch) return false;
+      return this.localSource !== this.sketch.source;
     },
   },
 
   methods: {
-    async saveSketch() {
+    async onSourceInput() {
+      console.log('source input');
       if (!this.sketch) return;
+      if (this.localSource !== this.sketch.source) {
+        this.storeLocalSource();
+      }
+    },
+
+    async storeLocalSource() {
+      console.log('store local source');
+      if (!this.sketch) return;
+      storage.setItem(this.sketchId, this.localSource);
+    },
+
+    async revertLocalSource() {
+      console.log('revert local source', this.sketchId);
+      if (!this.sketch) return;
+      storage.removeItem(this.sketchId);
+      this.localSource = this.sketch.source;
+      this.resetForm();
+      snackbar.show('Sketch Reverted');
+    },
+
+    async saveSketch() {
+      console.log('save sketch');
+      if (!this.sketch) return;
+
+      // @todo move this to sketches.saveSketch? probably, placing
+      // that check close to saving means everything always does it
+      if (!(this as any).$can('write', this.sketch)) {
+        console.error('user not authorized to save');
+        return;
+      }
+
       const isValid = await (this.$refs.observer as any).validate();
       if (!isValid) {
         console.error('form not valid!');
         return;
       }
 
-      sketches.saveSketch(this.sketch).then(() => {
-        // @todo make; this; a; shared; func ?
-        requestAnimationFrame(() => {
-          (this.$refs.observer as any).reset();
-        });
+      storage.removeItem(this.sketchId);
+      this.sketch.source = this.localSource;
 
-        snackbar.show('Sketch Saved!');
+      sketches.saveSketch(this.sketch).then(() => {
+        this.resetForm();
+        snackbar.show('Sketch Saved');
       });
     },
 
     async forkSketch() {
+      console.log('fork sketch');
+
       if (!this.sketch) return;
+
       const isValid = await (this.$refs.observer as any).validate();
       if (!isValid) {
         console.error('form not valid!');
         return;
       }
+
+      storage.removeItem(this.sketchId);
+      this.sketch.source = this.localSource;
 
       sketches
         .forkSketch(this.sketch)
@@ -158,6 +232,8 @@ export default Vue.extend({
             name: 'sketch',
             params: { sketchId: docRef.id },
           });
+          this.resetForm();
+          snackbar.show('Sketch Forked');
         })
         .catch((err) => {
           console.log('error forking sketch outer', err);
@@ -166,11 +242,18 @@ export default Vue.extend({
 
     deleteSketch() {
       if (!this.sketch) return;
+      storage.removeItem(this.sketchId);
       sketches.deleteSketch(this.sketch).then(() => {
         this.$router.replace({
           name: 'user',
           params: { username: auth.user.username },
         });
+      });
+    },
+
+    resetForm() {
+      requestAnimationFrame(() => {
+        (this.$refs.observer as any).reset();
       });
     },
   },
@@ -216,5 +299,15 @@ export default Vue.extend({
 .editor-wrap {
   position: relative;
   height: 100%;
+}
+
+.local-edit-message {
+  font-size: 10px;
+}
+
+.link {
+  color: $accent-color;
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

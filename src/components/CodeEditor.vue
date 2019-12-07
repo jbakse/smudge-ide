@@ -1,9 +1,5 @@
 <template>
-  <codemirror
-    v-bind:value="value"
-    v-on:input="emit"
-    :options="cmOptions"
-  ></codemirror>
+  <codemirror v-bind:value="value" v-on:input="emit" :options="cmOptions"></codemirror>
 </template>
 
 <script lang="ts">

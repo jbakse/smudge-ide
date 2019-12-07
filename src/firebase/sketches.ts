@@ -48,7 +48,6 @@ export function createSketch() {
 }
 
 export function saveSketch(sketch: Sketch) {
-  // if (sketch == null) return Promise.reject(new Error('Sketch is "null".'));
   return sketches.doc(sketch.id).update({
     ...sketch,
     updated: firebase.firestore.FieldValue.serverTimestamp(),
